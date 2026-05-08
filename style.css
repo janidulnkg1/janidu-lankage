@@ -1,33 +1,57 @@
 body {
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Orbitron', sans-serif;
   margin: 0;
   padding: 0;
-  line-height: 1.6;
-  background: #f9f9f9;
-  color: #333;
+  background: #0d0d0d;
+  color: #e0e0e0;
 }
 
 header {
-  background: #0a3d62;
-  color: #fff;
   text-align: center;
-  padding: 50px 20px;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+  color: #fff;
+}
+
+header h1 {
+  font-size: 3em;
+  text-shadow: 0 0 15px #00f0ff;
+}
+
+header h2 {
+  font-size: 1.5em;
+  color: #00f0ff;
 }
 
 header .btn {
   display: inline-block;
-  margin: 10px;
-  padding: 10px 20px;
-  background: #01a3a4;
-  color: #fff;
+  margin: 15px;
+  padding: 12px 25px;
+  background: #00f0ff;
+  color: #0d0d0d;
   text-decoration: none;
-  border-radius: 5px;
+  border-radius: 30px;
+  font-weight: bold;
+  transition: 0.3s;
 }
 
-section {
-  padding: 40px 20px;
+header .btn:hover {
+  background: #ff00ff;
+  color: #fff;
+  box-shadow: 0 0 20px #ff00ff;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  margin: 30px auto;
+  padding: 30px;
+  max-width: 800px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
 }
 
 h3 {
-  color: #0a3d62;
+  color: #00f0ff;
+  text-shadow: 0 0 10px #00f0ff;
 }
