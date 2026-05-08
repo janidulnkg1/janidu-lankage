@@ -1,0 +1,33 @@
+body {
+  font-family: 'Montserrat', sans-serif;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
+  background: #f9f9f9;
+  color: #333;
+}
+
+header {
+  background: #0a3d62;
+  color: #fff;
+  text-align: center;
+  padding: 50px 20px;
+}
+
+header .btn {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px 20px;
+  background: #01a3a4;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+section {
+  padding: 40px 20px;
+}
+
+h3 {
+  color: #0a3d62;
+}
