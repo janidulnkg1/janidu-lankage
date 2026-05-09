@@ -61,6 +61,11 @@ header .btn:hover {
   line-height: 1.9em; /* increased spacing */
 }
 
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 25px #ff00ff;
+}
+
 h3 {
   color: #00f0ff;
   text-shadow: 0 0 10px #00f0ff;
@@ -68,41 +73,71 @@ h3 {
 
 
 /* Professional Development */
-
+/* Professional Development */
 #professional-development {
   margin-top: 40px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  padding: 35px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  line-height: 1.9em;
+  text-align: center; /* ensures heading and content align centrally */
 }
 
 #professional-development h2 {
-  color: #333;
-  border-bottom: 2px solid #0073e6;
+  color: #00f0ff;
+  text-shadow: 0 0 10px #00f0ff;
+  border-bottom: 2px solid #00f0ff;
   padding-bottom: 8px;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .certification {
   margin-bottom: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: left; /* keeps text readable inside the centered card */
+}
+
+.certification:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 25px #ff00ff;
 }
 
 .certification h3 {
-  color: #0073e6;
+  color: #00f0ff;
+  text-shadow: 0 0 10px #00f0ff;
   margin-bottom: 5px;
 }
 
 .certification p {
   margin: 4px 0;
-  color: #555;
+  color: #e0e0e0;
 }
 
 .cert-img {
+  display: block;
+  margin: 10px auto; /* centers images inside each certification card */
   width: 250px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  margin-top: 10px;
+  border: 2px solid #00f0ff;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #00f0ff;
+  transition: box-shadow 0.3s ease;
 }
+
+.cert-img:hover {
+  box-shadow: 0 0 25px #ff00ff;
+}
+
+
 
 
 /* Avatar + Hologram Ring */
