@@ -50,8 +50,6 @@ header .btn:hover {
   box-shadow: 0 0 20px #ff00ff;
 }
 
-
-
 .card {
   background: rgba(255, 255, 255, 0.05);
   margin: 30px auto;
@@ -67,46 +65,83 @@ h3 {
   text-shadow: 0 0 10px #00f0ff;
 }
 
-/* Glitch Effect */
-.glitch {
+/* Avatar + Hologram Ring */
+.avatar-container {
   position: relative;
-  color: #00f0ff;
-  font-size: 3em;
-  animation: glitch 1s infinite;
+  display: inline-block;
 }
 
-.glitch::before, .glitch::after {
+.profile-pic {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 3px solid #00f0ff;
+  box-shadow: 0 0 25px #00f0ff;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  z-index: 2;
+}
+
+.profile-pic:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 40px #ff00ff;
+}
+
+.holo-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: rotateRing 6s linear infinite;
+  background: conic-gradient(from 0deg, #00f0ff, #ff00ff, #00ff00, #00f0ff);
+  opacity: 0.6;
+  z-index: 1;
+}
+
+@keyframes rotateRing {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Glitch Effect (fixed containment) */
+.glitch {
+  position: relative;
+  display: inline-block;
+  color: #00f0ff;
+  font-size: 3em;
+  overflow: hidden;
+}
+
+.glitch::before,
+.glitch::after {
   content: attr(data-text);
   position: absolute;
   left: 0;
+  width: 100%;
+  overflow: hidden;
 }
 
 .glitch::before {
   animation: glitchTop 1s infinite;
   color: #ff00ff;
-  clip: rect(0, 900px, 0, 0);
 }
 
 .glitch::after {
   animation: glitchBottom 1s infinite;
   color: #00ff00;
-  clip: rect(0, 900px, 0, 0);
-}
-
-@keyframes glitch {
-  0% { text-shadow: 2px 2px #ff00ff; }
-  50% { text-shadow: -2px -2px #00ff00; }
-  100% { text-shadow: 2px 2px #ff00ff; }
 }
 
 @keyframes glitchTop {
-  0% { clip: rect(0, 900px, 0, 0); }
-  50% { clip: rect(0, 900px, 100px, 0); }
-  100% { clip: rect(0, 900px, 0, 0); }
+  0% { clip-path: inset(0 0 90% 0); }
+  50% { clip-path: inset(0 0 10% 0); }
+  100% { clip-path: inset(0 0 90% 0); }
 }
 
 @keyframes glitchBottom {
-  0% { clip: rect(0, 900px, 0, 0); }
-  50% { clip: rect(100px, 900px, 200px, 0); }
-  100% { clip: rect(0, 900px, 0, 0); }
+  0% { clip-path: inset(90% 0 0 0); }
+  50% { clip-path: inset(10% 0 0 0); }
+  100% { clip-path: inset(90% 0 0 0); }
 }
