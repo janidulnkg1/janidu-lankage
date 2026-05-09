@@ -1,7 +1,7 @@
 # 🌐 Janidu Lankage - Portfolio Website
 
 Welcome to my personal portfolio website!  
-This site showcases my background as a **Software Engineer** and **Lecturer**, highlighting my skills in .NET Core development, AI/Data Science interests, and my teaching/tutoring experience in ICT and Computer Science.
+This site showcases my background as a **Software Engineer** and **Lecturer**, highlighting my skills in .NET Core development, AI/Data Science interests, and my teaching/tutoring experience in STEM..
 
 ---
 
@@ -44,7 +44,7 @@ Every push to the `main` branch updates the live site within minutes.
 ## 📬 Contact
 - 📞 [Call: +94 70 3413223](tel:+94703413223)  
 - 📧 [janidulnkg1@gmail.com](mailto:janidulnkg1@gmail.com)  
-- 📍 Malabe, Sri Lanka  
+- 📍 Colombo, Sri Lanka  
 
 ---
 
