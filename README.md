@@ -1,7 +1,7 @@
 # 🌐 Janidu Lankage - Portfolio Website
 
 Welcome to my personal portfolio website!  
-This site showcases my background as a **Software Engineer** and **Lecturer**, highlighting my skills in .NET Core development, AI/Data Science interests, and my teaching/tutoring experience in STEM..
+This site showcases my background as a **Software Engineer** and **Lecturer**, highlighting my skills in .NET Core development, AI/Data Science interests, and my teaching/tutoring experience in STEM.
 
 ---
 
