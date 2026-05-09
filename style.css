@@ -66,6 +66,45 @@ h3 {
   text-shadow: 0 0 10px #00f0ff;
 }
 
+
+/* Professional Development */
+
+#professional-development {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+#professional-development h2 {
+  color: #333;
+  border-bottom: 2px solid #0073e6;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+}
+
+.certification {
+  margin-bottom: 25px;
+}
+
+.certification h3 {
+  color: #0073e6;
+  margin-bottom: 5px;
+}
+
+.certification p {
+  margin: 4px 0;
+  color: #555;
+}
+
+.cert-img {
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+
 /* Avatar + Hologram Ring */
 .avatar-container {
   position: relative;
