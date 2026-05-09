@@ -74,6 +74,33 @@ h3 {
   font-family: 'Orbitron', sans-serif;
 }
 
+/* Experience */
+.exp {
+  margin-bottom: 25px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: left; /* keeps text readable inside the centered card */
+}
+
+.exp:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 25px #ff00ff;
+}
+
+.exp h3 {
+  color: #00f0ff;
+  text-shadow: 0 0 10px #00f0ff;
+  margin-bottom: 5px;
+}
+
+.exp p {
+  margin: 4px 0;
+  color: #e0e0e0;
+}
+
 
 /* Professional Development */
 .professional-development {
