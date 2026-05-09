@@ -1,5 +1,5 @@
 body {
-  font-family: 'Orbitron', sans-serif;
+  font-family: 'Times New Roman', serif;
   margin: 0;
   padding: 0;
   background: #0d0d0d;
@@ -18,6 +18,7 @@ body {
 
 header {
   text-align: center;
+  font-family: 'Orbitron', sans-serif;
   padding: 60px 20px;
   color: #fff;
 }
@@ -69,12 +70,13 @@ header .btn:hover {
 h3 {
   color: #00f0ff;
   text-shadow: 0 0 10px #00f0ff;
+  font-family: 'Orbitron', sans-serif;
 }
 
 
 /* Professional Development */
 /* Professional Development */
-#professional-development {
+.professional-development {
   margin-top: 40px;
   padding: 35px;
   max-width: 800px;
@@ -88,7 +90,7 @@ h3 {
   text-align: center; /* ensures heading and content align centrally */
 }
 
-#professional-development h2 {
+.professional-development h2 {
   color: #00f0ff;
   text-shadow: 0 0 10px #00f0ff;
   border-bottom: 2px solid #00f0ff;
@@ -138,8 +140,6 @@ h3 {
 }
 
 
-
-
 /* Avatar + Hologram Ring */
 .avatar-container {
   position: relative;
@@ -147,10 +147,80 @@ h3 {
 }
 
 .profile-pic {
-  width: 140px;
-  height: 140px;
+  width: 200px;
+  height: 250px;
   border-radius: 50%;
   border: 3px solid #00f0ff;
   box-shadow: 0 0 20px #00f0ff;
   margin-bottom: 15px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Glitch Effect (fixed containment) */
+.glitch {
+  position: relative;
+  display: inline-block;
+  color: #00f0ff;
+  font-size: 2.5em;   /* slightly smaller */
+  line-height: 1.2em;
+  height: 1.2em;      /* containment */
+  overflow: hidden;
+  text-shadow: 0 0 15px #00f0ff;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+}
+
+.glitch::before {
+  animation: glitchTop 1s infinite;
+  color: #f8f6f8;
+}
+
+.glitch::after {
+  animation: glitchBottom 1s infinite;
+  color: #f8f6f8;
+}
+
+@keyframes glitchTop {
+  0% { clip-path: inset(0 0 90% 0); }
+  50% { clip-path: inset(0 0 10% 0); }
+  100% { clip-path: inset(0 0 90% 0); }
+}
+
+@keyframes glitchBottom {
+  0% { clip-path: inset(90% 0 0 0); }
+  50% { clip-path: inset(10% 0 0 0); }
+  100% { clip-path: inset(90% 0 0 0); }
+}
+
+/* Contact Section Styling */
+.card.contact {
+  padding: 20px;
+  line-height: 1.8; /* adds spacing between lines */
+}
+
+
+.card.contact p {
+  margin: 8px 0;
+  color: #fff;
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* Contact Links */
+.contact-link {
+  
+  color: #fff;              /* white text */
+  text-decoration: none;    /* remove underline */
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+.contact-link:hover {
+  color: #fff;              /* keep white */
+  text-shadow: 0 0 6px #00ffff; /* neon glow effect */
+}
