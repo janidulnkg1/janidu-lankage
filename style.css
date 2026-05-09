@@ -58,7 +58,7 @@ header .btn:hover {
   border-radius: 15px;
   backdrop-filter: blur(10px);
   box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
-  line-height: 1.9em;
+  line-height: 1.9em; /* increased spacing */
 }
 
 h3 {
@@ -66,4 +66,17 @@ h3 {
   text-shadow: 0 0 10px #00f0ff;
 }
 
-/* Avatar + Hologram
+/* Avatar + Hologram Ring */
+.avatar-container {
+  position: relative;
+  display: inline-block;
+}
+
+.profile-pic {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  border: 3px solid #00f0ff;
+  box-shadow: 0 0 20px #00f0ff;
+  margin-bottom: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease
