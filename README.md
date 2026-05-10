@@ -43,7 +43,8 @@ Every push to the `main` branch updates the live site within minutes.
 
 ## 📬 Contact
 - 📞 [Call: +94 70 3413223](tel:+94703413223)  
-- 📧 [janidulnkg1@gmail.com](mailto:janidulnkg1@gmail.com)  
+- 📧 [janidulnkg1@gmail.com](mailto:janidulnkg1@gmail.com)
+- 📧 [LinkedIn](https://www.linkedin.com/in/janidu-lankage-12336767/)   
 - 📍 Colombo, Sri Lanka  
 
 ---
