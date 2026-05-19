@@ -7,7 +7,7 @@
   <style>
 /* General page styling */
 body {
-  font-family: 'Orbitron', sans-serif; /* futuristic font */
+  font-family: 'Orbitron', sans-serif;
   background: linear-gradient(135deg, #000000, #1a001a, #330033);
   margin: 0;
   padding: 0;
@@ -80,16 +80,16 @@ header p {
 
 /* Correct / Wrong feedback */
 .options button.correct {
-  background: #6a0dad !important;
+  background: #2ecc71 !important; /* Green */
   color: white;
-  box-shadow: 0 0 15px #6a0dad;
+  box-shadow: 0 0 15px #2ecc71;
   animation: pulseCorrect 1s ease;
 }
 
 .options button.wrong {
-  background: #8b0000 !important;
+  background: #e74c3c !important; /* Red */
   color: white;
-  box-shadow: 0 0 15px #8b0000;
+  box-shadow: 0 0 15px #e74c3c;
   animation: shakeWrong 0.5s ease;
 }
 
@@ -161,6 +161,26 @@ header p {
   50% { transform: translateX(5px); }
   75% { transform: translateX(-5px); }
   100% { transform: translateX(0); }
+}
+
+#restartBtn {
+  margin-top: 25px;
+  padding: 14px 24px;
+  background: #bb86fc;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1em;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px #fff;
+  display: inline-block;
+}
+
+#restartBtn:hover {
+  background: #9a67ea;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #bb86fc;
 }
 
 
@@ -311,6 +331,50 @@ function showResult() {
     }
   }
   feedbackEl.textContent = weakAreas.length > 0 ? feedback + weakAreas.join(", ") : "Great job! You did well across all areas.";
+}
+
+
+function showResult() {
+  questionEl.textContent = "Quiz Completed!";
+  optionsEl.innerHTML = "";
+  nextBtn.style.display = "none";
+  resultEl.textContent = `Your score: ${score} / ${selectedQuestions.length}`;
+
+  // Feedback: categories with <60% accuracy
+  let feedback = "Areas to focus more on: ";
+  let weakAreas = [];
+  for (let category in categoryAttempts) {
+    let accuracy = (categoryScores[category] || 0) / categoryAttempts[category];
+    if (accuracy < 0.6) {
+      weakAreas.push(category);
+    }
+  }
+  feedbackEl.textContent = weakAreas.length > 0 ? feedback + weakAreas.join(", ") : "Great job! You did well across all areas.";
+
+  // Show restart button
+  const restartBtn = document.createElement("button");
+  restartBtn.id = "restartBtn";
+  restartBtn.textContent = "Restart Quiz";
+  restartBtn.addEventListener("click", restartQuiz);
+  feedbackEl.appendChild(restartBtn);
+}
+
+function restartQuiz() {
+  // Reset variables
+  currentQuestion = 0;
+  score = 0;
+  categoryScores = {};
+  categoryAttempts = {};
+
+  // Pick new random 10 questions
+  selectedQuestions = getRandomQuestions(quizData, 10);
+
+  // Clear results and feedback
+  resultEl.textContent = "";
+  feedbackEl.textContent = "";
+
+  // Load first question
+  loadQuestion();
 }
 
 // Start quiz
