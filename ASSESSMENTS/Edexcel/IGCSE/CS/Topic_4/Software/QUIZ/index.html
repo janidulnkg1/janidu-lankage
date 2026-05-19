@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Computer Science Quiz</title>
+  <style>
+/* General page styling */
+body {
+  font-family: 'Orbitron', sans-serif; /* futuristic font */
+  background: linear-gradient(135deg, #000000, #1a001a, #330033);
+  margin: 0;
+  padding: 0;
+  color: #e0d6ff;
+  overflow-x: hidden;
+}
+
+/* Header */
+header {
+  background: rgba(0, 0, 0, 0.8);
+  color: #bb86fc;
+  padding: 30px;
+  text-align: center;
+  text-shadow: 0 0 10px #bb86fc, 0 0 20px #bb86fc;
+  animation: glowPulse 3s infinite alternate;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5em;
+}
+
+header p {
+  margin: 10px 0 0;
+  font-size: 1.2em;
+}
+
+/* Quiz container */
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(187, 134, 252, 0.6);
+  backdrop-filter: blur(10px);
+  animation: fadeInUp 1s ease;
+}
+
+/* Question text */
+#question {
+  font-size: 1.4em;
+  color: #bb86fc;
+  margin-bottom: 25px;
+  text-shadow: 0 0 8px #bb86fc;
+}
+
+/* Options styling */
+.options button {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+  padding: 14px;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid #bb86fc;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.1em;
+  color: #e0d6ff;
+  text-shadow: 0 0 5px #000;
+}
+
+.options button:hover {
+  background: #bb86fc;
+  color: #000;
+  transform: scale(1.05);
+  box-shadow: 0 0 15px #bb86fc;
+}
+
+/* Correct / Wrong feedback */
+.options button.correct {
+  background: #6a0dad !important;
+  color: white;
+  box-shadow: 0 0 15px #6a0dad;
+  animation: pulseCorrect 1s ease;
+}
+
+.options button.wrong {
+  background: #8b0000 !important;
+  color: white;
+  box-shadow: 0 0 15px #8b0000;
+  animation: shakeWrong 0.5s ease;
+}
+
+/* Next button */
+#nextBtn {
+  margin-top: 25px;
+  padding: 14px 24px;
+  background: #bb86fc;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: none;
+  font-size: 1.1em;
+  transition: all 0.3s ease;
+  text-shadow: 0 0 5px #fff;
+}
+
+#nextBtn:hover {
+  background: #9a67ea;
+  transform: scale(1.1);
+  box-shadow: 0 0 20px #bb86fc;
+}
+
+/* Result and feedback */
+#result {
+  text-align: center;
+  font-size: 1.5em;
+  margin-top: 25px;
+  font-weight: bold;
+  color: #bb86fc;
+  text-shadow: 0 0 10px #bb86fc;
+  animation: fadeIn 1.5s ease;
+}
+
+#feedback {
+  margin-top: 20px;
+  font-size: 1.2em;
+  color: #e0d6ff;
+  text-align: center;
+  animation: fadeIn 2s ease;
+}
+
+/* Animations */
+@keyframes glowPulse {
+  from { text-shadow: 0 0 10px #bb86fc, 0 0 20px #bb86fc; }
+  to { text-shadow: 0 0 20px #bb86fc, 0 0 40px #bb86fc; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulseCorrect {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shakeWrong {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+
+
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Computer Science Quiz</h1>
+    <p> Questions on System & Application Software</p>
+  </header>
+
+  <div class="container">
+    <div id="quiz">
+      <h2 id="question">Question text</h2>
+      <div class="options" id="options"></div>
+      <button id="nextBtn">Next Question</button>
+      <div id="result"></div>
+      <div id="feedback"></div>
+    </div>
+  </div>
+
+  <script>
+    const quizData = [
+      // --- SAMPLE QUESTIONS (expand to 40) ---
+      { question: "Which of the following is system software?", options: ["Microsoft Word","Windows OS","Photoshop","Chrome"], answer: "Windows OS", category:"System Software" },
+      { question: "What is application software?", options: ["Programs users interact with","Programs that manage hardware","Device drivers","BIOS"], answer: "Programs users interact with", category:"Application Software" },
+      { question: "Scheduling in OS means?", options: ["Allocating CPU time","Managing files","Authenticating users","Controlling peripherals"], answer: "Allocating CPU time", category:"Scheduling" },
+      { question: "Processes are?", options: ["Programs waiting/executing","Peripheral devices","User interfaces","Utility software"], answer: "Programs waiting/executing", category:"Processes" },
+      { question: "Multitasking means?", options: ["Running multiple processes","Running one program","Backing up files","Authenticating users"], answer: "Running multiple processes", category:"Multitasking" },
+      { question: "Which is a peripheral device?", options: ["CPU","RAM","Printer","Kernel"], answer: "Printer", category:"Peripheral Devices" },
+      { question: "Command Line Interface is?", options: ["Interface using typed commands","Graphical interface","Touch interface","Voice interface"], answer: "Interface using typed commands", category:"User Interface" },
+      { question: "Authentication is?", options: ["Proving account holder","Managing CPU","Installing drivers","Compressing files"], answer: "Proving account holder", category:"Authentication" },
+      { question: "Utility software example?", options: ["Disk Cleanup","Excel","Windows OS","Device Drivers"], answer: "Disk Cleanup", category:"Utility Software" },
+        { question: "Which of these is NOT system software?", options: ["Operating System","Utility Program","Word Processor","Device Driver"], answer: "Word Processor", category:"System Software" },
+        { question: "Which software lets users create documents?", options: ["Utility Software","Application Software","System Software","Firmware"], answer: "Application Software", category:"Application Software" },
+        { question: "Round-robin scheduling is used to?", options: ["Allocate CPU fairly","Manage memory","Authenticate users","Control peripherals"], answer: "Allocate CPU fairly", category:"Scheduling" },
+        { question: "Processes can be in which states?", options: ["Running, Waiting, Ready","Installed, Deleted, Updated","Open, Closed, Idle","Active, Passive, Dormant"], answer: "Running, Waiting, Ready", category:"Processes" },
+        { question: "Multitasking improves?", options: ["CPU utilization","Authentication","Peripheral speed","Disk size"], answer: "CPU utilization", category:"Multitasking" },
+        { question: "Which is an internal peripheral?", options: ["Graphics Card","Printer","Scanner","Monitor"], answer: "Graphics Card", category:"Peripheral Devices" },
+        { question: "Which is an external peripheral?", options: ["RAM","Motherboard","Keyboard","Cache"], answer: "Keyboard", category:"Peripheral Devices" },
+        { question: "A GUI is?", options: ["Graphical User Interface","General Utility Interface","Global User Interaction","Generic Utility Input"], answer: "Graphical User Interface", category:"User Interface" },
+        { question: "CLI requires?", options: ["Typing commands","Clicking icons","Touch gestures","Voice input"], answer: "Typing commands", category:"Command Line Interface" },
+        { question: "Authentication often uses?", options: ["Passwords","Printers","CPUs","Monitors"], answer: "Passwords", category:"Authentication" },
+        { question: "Utility software helps with?", options: ["Backup and recovery","Writing essays","Gaming","Drawing"], answer: "Backup and recovery", category:"Utility Software" },
+        { question: "Which is a system utility?", options: ["Disk Defragmenter","MS Word","Photoshop","Excel"], answer: "Disk Defragmenter", category:"Utility Software" },
+        { question: "System software acts as?", options: ["Bridge between hardware and user","Entertainment tool","Peripheral device","Authentication system"], answer: "Bridge between hardware and user", category:"System Software" },
+        { question: "Application software examples include?", options: ["Browsers and games","BIOS and drivers","Kernel and scheduler","Disk cleanup"], answer: "Browsers and games", category:"Application Software" },
+        { question: "Scheduling ensures?", options: ["Fair CPU time","More RAM","Better graphics","Authentication"], answer: "Fair CPU time", category:"Scheduling" },
+        { question: "Processes are managed by?", options: ["Operating System","Printer","User","Utility software"], answer: "Operating System", category:"Processes" },
+        { question: "Multitasking allows?", options: ["Multiple apps open","Only one app open","No apps open","Hardware upgrades"], answer: "Multiple apps open", category:"Multitasking" },
+        { question: "Peripheral devices include?", options: ["Mouse and keyboard","CPU and RAM","Cache and registers","Kernel and scheduler"], answer: "Mouse and keyboard", category:"Peripheral Devices" },
+        { question: "User interface provides?", options: ["Interaction point","Authentication","Scheduling","Backup"], answer: "Interaction point", category:"User Interface" },
+        { question: "CLI is best for?", options: ["Advanced users","Beginners","Children","Artists"], answer: "Advanced users", category:"Command Line Interface" },
+        { question: "Authentication can involve?", options: ["Biometrics","Scheduling","Multitasking","Peripheral devices"], answer: "Biometrics", category:"Authentication" },
+        { question: "Utility software can?", options: ["Compress files","Run CPU","Act as OS","Provide GUI"], answer: "Compress files", category:"Utility Software" },
+        { question: "System software includes?", options: ["Operating System","Games","Browsers","Word processors"], answer: "Operating System", category:"System Software" },
+        { question: "Application software is designed for?", options: ["End users","Hardware","System boot","Authentication"], answer: "End users", category:"Application Software" },
+        { question: "Scheduling algorithms include?", options: ["FCFS, SJF, Round Robin","Backup, Restore, Cleanup","Login, Logout, Register","Copy, Paste, Delete"], answer: "FCFS, SJF, Round Robin", category:"Scheduling" },
+        { question: "Processes share?", options: ["CPU and memory","Printers","Authentication","Peripherals only"], answer: "CPU and memory", category:"Processes" },
+        { question: "Multitasking is supported by?", options: ["Modern OS","Printers","Monitors","BIOS only"], answer: "Modern OS", category:"Multitasking" },
+        { question: "Peripheral devices can be?", options: ["Input or output","CPU only","RAM only","Cache only"], answer: "Input or output", category:"Peripheral Devices" },
+        { question: "User interface types include?", options: ["CLI and GUI","CPU and RAM","Printer and Scanner","Cache and Registers"], answer: "CLI and GUI", category:"User Interface" },
+        { question: "Authentication ensures?", options: ["Security","Scheduling","Multitasking","Peripheral speed"], answer: "Security", category:"Authentication" },
+        { question: "Utility software examples?", options: ["Antivirus, Backup tools","Games, Browsers","OS, Drivers","CPU, RAM"], answer: "Antivirus, Backup tools", category:"Utility Software" },
+
+      
+    ];
+
+    // Shuffle and pick N random questions
+function getRandomQuestions(allQuestions, num) {
+  const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, num);
+}
+
+// Variables
+let selectedQuestions = getRandomQuestions(quizData, 10);
+let currentQuestion = 0;
+let score = 0;
+let categoryScores = {};
+let categoryAttempts = {};
+
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const nextBtn = document.getElementById("nextBtn");
+const resultEl = document.getElementById("result");
+const feedbackEl = document.getElementById("feedback");
+
+function loadQuestion() {
+  const q = selectedQuestions[currentQuestion];
+  questionEl.textContent = `Q${currentQuestion + 1}: ${q.question}`;
+  optionsEl.innerHTML = "";
+  q.options.forEach(option => {
+    const btn = document.createElement("button");
+    btn.textContent = option;
+    btn.className = ""; // reset classes
+    btn.addEventListener("click", () => selectAnswer(btn, q.answer, q.category));
+    optionsEl.appendChild(btn);
+  });
+  nextBtn.style.display = "none";
+}
+
+function selectAnswer(button, correctAnswer, category) {
+  const buttons = optionsEl.querySelectorAll("button");
+  buttons.forEach(btn => btn.disabled = true);
+
+  // Track attempts per category
+  categoryAttempts[category] = (categoryAttempts[category] || 0) + 1;
+
+  if (button.textContent === correctAnswer) {
+    button.classList.add("correct");
+    score++;
+    categoryScores[category] = (categoryScores[category] || 0) + 1;
+  } else {
+    button.classList.add("wrong");
+    // Highlight correct answer
+    buttons.forEach(btn => {
+      if (btn.textContent === correctAnswer) {
+        btn.classList.add("correct");
+      }
+    });
+  }
+  nextBtn.style.display = "block";
+}
+
+nextBtn.addEventListener("click", () => {
+  currentQuestion++;
+  if (currentQuestion < selectedQuestions.length) {
+    loadQuestion();
+  } else {
+    showResult();
+  }
+});
+
+function showResult() {
+  questionEl.textContent = "Quiz Completed!";
+  optionsEl.innerHTML = "";
+  nextBtn.style.display = "none";
+  resultEl.textContent = `Your score: ${score} / ${selectedQuestions.length}`;
+
+  // Feedback: categories with <60% accuracy
+  let feedback = "Areas to focus more on: ";
+  let weakAreas = [];
+  for (let category in categoryAttempts) {
+    let accuracy = (categoryScores[category] || 0) / categoryAttempts[category];
+    if (accuracy < 0.6) {
+      weakAreas.push(category);
+    }
+  }
+  feedbackEl.textContent = weakAreas.length > 0 ? feedback + weakAreas.join(", ") : "Great job! You did well across all areas.";
+}
+
+// Start quiz
+loadQuestion();
+
+
+  </script>
+</body>
+</html>
