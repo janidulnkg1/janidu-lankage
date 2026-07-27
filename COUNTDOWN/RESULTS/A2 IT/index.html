@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Countdown to Edexcel AL RESULTS DAY</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Impact', sans-serif;
+      text-align: center;
+      background: linear-gradient(black, #111);
+      color: #ff0000;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 10px #ff0000;
+    }
+    #countdown {
+      font-size: 2em;
+      color: #fff;
+      text-shadow: 2px 2px 15px #ff0000;
+      max-width: 90%;
+      word-wrap: break-word;
+    }
+    .warning {
+      font-size: 1.2em;
+      margin-top: 30px;
+      color: #ff4444;
+      animation: blink 1s infinite;
+    }
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    /* Mobile responsiveness */
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8em;
+      }
+      #countdown {
+        font-size: 1.4em;
+      }
+      .warning {
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>☠️ COUNTDOWN TO EDEXCEL AL Results  ☠️</h1>
+  <div id="countdown"></div>
+  <div class="warning">⚠️ Your fate is sealed... ⚠️ </div>
+  <div class="warning">Buy one, get one coffin free! Courtesy of Jayarathna Funeral Homes! </div>
+
+  <script>
+    function updateCountdown() {
+      const targetDate = new Date("August 13, 2026 09:00:00").getTime();
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+
+      // Calculate time units
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+      document.getElementById("countdown").innerHTML =
+        days + " days " + hours + " hours " + minutes + " minutes " + seconds + " seconds remaining";
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
