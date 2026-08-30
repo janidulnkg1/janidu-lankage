@@ -145,9 +145,16 @@
     display:flex;
     align-items:center;
     justify-content:space-between;
+    gap:12px;
     padding:16px 18px 14px;
     border-bottom:1px solid var(--rule-soft);
     background:linear-gradient(180deg, rgba(18,42,34,0.03), transparent);
+  }
+  .panel-head .right{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-shrink:0;
   }
   .panel-head h2{
     font-family:var(--mono);
@@ -179,9 +186,6 @@
     color:var(--ink-faint);
   }
   .stamp{
-    position:absolute;
-    top:16px;
-    right:18px;
     font-family:var(--mono);
     font-size:9.5px;
     letter-spacing:.14em;
@@ -190,7 +194,7 @@
     border:1px solid var(--gold);
     border-radius:20px;
     padding:3px 10px;
-    transform:rotate(2deg);
+    white-space:nowrap;
     opacity:.85;
   }
   textarea, pre{
@@ -355,9 +359,11 @@ UNICEF (2021) Sri Lanka Education Response to COVID-19. Colombo: UNICEF Regional
     <div class="panel">
       <div class="panel-head">
         <h2><span class="num">2</span>Output — Sources XML</h2>
-        <span class="count" id="outCount">0 sources</span>
+        <div class="right">
+          <span class="count" id="outCount">0 sources</span>
+          <span class="stamp">XML · 2003</span>
+        </div>
       </div>
-      <span class="stamp">XML · 2003</span>
       <div id="outputWrap" style="flex:1;overflow:auto;">
         <div class="empty-state" id="emptyState"><span class="glyph">&ldquo;&rdquo;</span>Converted XML will appear here once you click Convert.</div>
         <pre id="output" style="display:none;"></pre>
