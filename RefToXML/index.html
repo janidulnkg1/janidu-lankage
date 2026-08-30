@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harvard References → Word Bibliography XML</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#161b18;
+    --paper:#efe9d8;
+    --paper-2:#e7dfc9;
+    --panel:#fbf8ef;
+    --rule:#cabf9c;
+    --rule-soft:#ddd3b4;
+    --deep:#122a22;
+    --deep-2:#193b30;
+    --gold:#a9772f;
+    --gold-bright:#c68f42;
+    --gold-ink:#fbf3e2;
+    --ink-soft:#5b5748;
+    --ink-faint:#8f8971;
+    --mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+    --serif: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+    --display: "Fraunces", "Iowan Old Style", Georgia, serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family: var(--serif);
+    background:
+      radial-gradient(1200px 600px at 12% -10%, rgba(18,42,34,0.06), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(169,119,47,0.08), transparent 55%),
+      repeating-linear-gradient(180deg, rgba(0,0,0,0.012) 0px, rgba(0,0,0,0.012) 1px, transparent 1px, transparent 3px),
+      var(--paper);
+    color:var(--ink);
+    padding:0 20px 70px;
+  }
+
+  /* ---- Masthead ---- */
+  .masthead{
+    max-width:1180px;
+    margin:0 auto;
+    padding:40px 0 26px;
+  }
+  .masthead-top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding-bottom:16px;
+    border-bottom:2px solid var(--deep);
+  }
+  .masthead-top .kicker{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    font-weight:600;
+  }
+  .masthead-top .kicker::before{
+    content:"◆ ";
+    color:var(--gold-bright);
+  }
+  .masthead-top .issue{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+  .masthead-title{
+    padding-top:22px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+  h1{
+    font-family:var(--display);
+    font-size:clamp(32px,4.4vw,52px);
+    line-height:1.04;
+    margin:0;
+    font-weight:600;
+    font-optical-sizing:auto;
+    letter-spacing:-.01em;
+    color:var(--deep);
+    max-width:16ch;
+  }
+  h1 em{
+    font-style:italic;
+    font-weight:500;
+    color:var(--gold);
+  }
+  .masthead-title p{
+    margin:0;
+    color:var(--ink-soft);
+    max-width:36ch;
+    line-height:1.55;
+    font-size:14.5px;
+    padding-bottom:4px;
+  }
+  .masthead-title p code{
+    font-family:var(--mono);
+    background:var(--paper-2);
+    border:1px solid var(--rule);
+    padding:1px 5px;
+    border-radius:3px;
+    font-size:12.5px;
+  }
+
+  .wrap{max-width:1180px;margin:0 auto;}
+
+  .grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    margin-top:30px;
+  }
+  @media (max-width:860px){
+    .grid{grid-template-columns:1fr;}
+  }
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--rule);
+    box-shadow:0 1px 0 rgba(0,0,0,0.02), 0 14px 30px -22px rgba(18,42,34,0.35);
+    border-radius:3px;
+    display:flex;
+    flex-direction:column;
+    min-height:520px;
+    position:relative;
+    overflow:hidden;
+  }
+  .panel::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:3px;
+    background:linear-gradient(90deg, var(--deep) 0%, var(--deep) 60%, var(--gold-bright) 100%);
+  }
+  .panel-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 18px 14px;
+    border-bottom:1px solid var(--rule-soft);
+    background:linear-gradient(180deg, rgba(18,42,34,0.03), transparent);
+  }
+  .panel-head h2{
+    font-family:var(--mono);
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.12em;
+    margin:0;
+    color:var(--deep);
+    display:flex;
+    align-items:center;
+    gap:9px;
+  }
+  .panel-head h2 .num{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:19px;
+    height:19px;
+    border-radius:50%;
+    background:var(--deep);
+    color:var(--gold-ink);
+    font-size:10px;
+    font-weight:600;
+  }
+  .count{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.04em;
+    color:var(--ink-faint);
+  }
+  .stamp{
+    position:absolute;
+    top:16px;
+    right:18px;
+    font-family:var(--mono);
+    font-size:9.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    border:1px solid var(--gold);
+    border-radius:20px;
+    padding:3px 10px;
+    transform:rotate(2deg);
+    opacity:.85;
+  }
+  textarea, pre{
+    flex:1;
+    width:100%;
+    border:none;
+    resize:none;
+    padding:18px;
+    font-family:var(--mono);
+    font-size:13px;
+    line-height:1.6;
+    color:var(--ink);
+    background:transparent;
+    outline:none;
+  }
+  textarea::placeholder{color:var(--ink-faint);}
+  pre{
+    margin:0;
+    overflow:auto;
+    white-space:pre-wrap;
+    word-break:break-word;
+  }
+  .empty-state{
+    padding:18px;
+    color:var(--ink-faint);
+    font-family:var(--mono);
+    font-size:13px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .empty-state .glyph{
+    font-family:var(--display);
+    font-size:26px;
+    color:var(--rule);
+    font-style:italic;
+  }
+  .actions{
+    display:flex;
+    gap:12px;
+    align-items:center;
+    margin-top:22px;
+    flex-wrap:wrap;
+  }
+  button{
+    font-family:var(--mono);
+    font-size:11.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    padding:12px 22px;
+    border-radius:2px;
+    border:1px solid var(--deep);
+    cursor:pointer;
+    background:var(--deep);
+    color:var(--gold-ink);
+    transition:all .18s ease;
+    font-weight:500;
+  }
+  button:hover:not(:disabled){
+    background:var(--deep-2);
+    box-shadow:0 3px 12px -4px rgba(18,42,34,0.5);
+    transform:translateY(-1px);
+  }
+  button.secondary{
+    background:transparent;
+    color:var(--deep);
+    border:1px solid var(--rule);
+  }
+  button.secondary:hover:not(:disabled){
+    border-color:var(--gold);
+    color:var(--gold);
+    background:transparent;
+    box-shadow:none;
+  }
+  button:disabled{
+    opacity:.35;
+    cursor:not-allowed;
+    transform:none;
+    box-shadow:none;
+  }
+  .status{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--ink-soft);
+    min-height:16px;
+  }
+  .warnings{
+    margin-top:16px;
+    border-left:3px solid var(--gold);
+    background:#f6ead2;
+    padding:12px 16px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:#6b4b21;
+    line-height:1.7;
+    display:none;
+    border-radius:0 3px 3px 0;
+  }
+  .warnings.show{display:block;}
+  .note-footer{
+    margin-top:34px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-faint);
+    letter-spacing:.01em;
+  }
+  .site-footer{
+    margin-top:22px;
+    padding-top:20px;
+    border-top:1px solid var(--rule);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .site-footer .brand{
+    font-family:var(--display);
+    font-size:14px;
+    font-style:italic;
+    color:var(--ink-soft);
+    letter-spacing:.01em;
+  }
+  .site-footer .brand strong{
+    color:var(--deep);
+    font-weight:600;
+    font-style:normal;
+  }
+  .site-footer .meta{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--ink-faint);
+  }
+</style>
+</head>
+<body>
+  <div class="masthead">
+    <div class="masthead-top">
+      <span class="kicker">Reference Utility</span>
+      <span class="issue">Harvard → MS&nbsp;Word Bibliography</span>
+    </div>
+    <div class="masthead-title">
+      <h1>Citations,<br><em>properly bound.</em></h1>
+      <p>Paste Harvard-style references on the left. This converts them into the Microsoft Word bibliography schema (<code>&lt;b:Sources&gt;</code>) so they drop straight into a Word source list — no retyping.</p>
+    </div>
+  </div>
+
+<div class="wrap">
+  <div class="grid">
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span class="num">1</span>Input — Harvard references</h2>
+        <span class="count" id="inCount">0 lines</span>
+      </div>
+      <textarea id="input" placeholder="Abeywardena, T. &amp; Perera, N. (2024) 'Curriculum reform in comparative perspective: Sri Lanka and its regional peers', Asian Journal of Comparative Education, 9(1), pp. 22-41.
+
+UNICEF (2021) Sri Lanka Education Response to COVID-19. Colombo: UNICEF Regional Office Report."></textarea>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <h2><span class="num">2</span>Output — Sources XML</h2>
+        <span class="count" id="outCount">0 sources</span>
+      </div>
+      <span class="stamp">XML · 2003</span>
+      <div id="outputWrap" style="flex:1;overflow:auto;">
+        <div class="empty-state" id="emptyState"><span class="glyph">&ldquo;&rdquo;</span>Converted XML will appear here once you click Convert.</div>
+        <pre id="output" style="display:none;"></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button id="convertBtn">Convert to XML</button>
+    <button id="copyBtn" class="secondary" disabled>Copy XML</button>
+    <button id="downloadBtn" class="secondary" disabled>Download .xml</button>
+    <span class="status" id="status"></span>
+  </div>
+
+  <div class="warnings" id="warnings"></div>
+
+  <footer class="note-footer">Parsing is heuristic — always spot-check unusual reference formats (reports, edited volumes, non-standard punctuation) before relying on the output.</footer>
+
+  <footer class="site-footer">
+    <span class="brand">Built by <strong>Janidu Lankage</strong></span>
+    <span class="meta">&copy; 2026 Janidu Lankage. All rights reserved.</span>
+  </footer>
+</div>
+
+<script>
+(function(){
+  const input = document.getElementById('input');
+  const output = document.getElementById('output');
+  const emptyState = document.getElementById('emptyState');
+  const inCount = document.getElementById('inCount');
+  const outCount = document.getElementById('outCount');
+  const convertBtn = document.getElementById('convertBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const downloadBtn = document.getElementById('downloadBtn');
+  const status = document.getElementById('status');
+  const warningsBox = document.getElementById('warnings');
+
+  function updateInCount(){
+    const lines = input.value.split('\n').map(l=>l.trim()).filter(Boolean);
+    inCount.textContent = lines.length + (lines.length === 1 ? ' line' : ' lines');
+  }
+  input.addEventListener('input', updateInCount);
+  updateInCount();
+
+  function escapeXml(str){
+    if(!str) return '';
+    return str
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&apos;');
+  }
+
+  function genGuid(){
+    function seg(n){
+      let s='';
+      for(let i=0;i<n;i++){ s += Math.floor(Math.random()*16).toString(16).toUpperCase(); }
+      return s;
+    }
+    return '{' + seg(8) + '-' + seg(4) + '-4' + seg(3) + '-' + seg(4) + '-' + seg(12) + '}';
+  }
+
+  // Parse an "authors" chunk like "Smith, J., Jones, K. & Brown, L." or "Efendi, N. et al." or "UNICEF"
+  function parseAuthors(raw){
+    let str = raw.trim();
+    let etAl = false;
+    if(/et\s?al\.?$/i.test(str)){
+      etAl = true;
+      str = str.replace(/,?\s*et\s?al\.?$/i,'').trim();
+    }
+    // Pattern: Lastname, Initials(with dots, may include hyphenated/apostrophe names)
+    const authorRegex = /([A-Z][A-Za-z'\-]+(?:\s[A-Z][A-Za-z'\-]+)?)\s*,\s*((?:[A-Z]\.?\s?){1,4})/g;
+    const authors = [];
+    let match;
+    while((match = authorRegex.exec(str)) !== null){
+      const last = match[1].trim();
+      let initials = match[2].trim().replace(/\s+/g,'');
+      // split initials into letters
+      const letters = initials.split('.').map(s=>s.trim()).filter(Boolean);
+      const first = letters[0] || '';
+      const middle = letters.slice(1).join(' ');
+      authors.push({last, first, middle});
+    }
+    if(authors.length === 0){
+      // No "Last, Initial" pattern matched — treat as corporate/organisation author
+      if(str.length){
+        authors.push({last: str, first:'', middle:''});
+      }
+    }
+    return {authors, etAl};
+  }
+
+  function parseVolumeIssue(text){
+    const m = text.match(/(\d+)\s*\(\s*([\w\-]+)\s*\)/);
+    if(m) return {volume: m[1], issue: m[2], full: m[0]};
+    return null;
+  }
+
+  function parsePages(text){
+    const m = text.match(/pp\.?\s*([\d]+\s*[-–]\s*[\d]+|\d+)/i);
+    if(m) return {pages: m[1].replace(/\s/g,''), full: m[0]};
+    return null;
+  }
+
+  function parseOneReference(line){
+    const original = line.trim();
+    if(!original) return null;
+
+    // Split authors / year / rest
+    const yearMatch = original.match(/^(.*?)\((\d{4}[a-z]?)\)\s*(.*)$/);
+    let authorsRaw, year, rest;
+    if(yearMatch){
+      authorsRaw = yearMatch[1].trim().replace(/,\s*$/,'');
+      year = yearMatch[2];
+      rest = yearMatch[3].trim();
+    } else {
+      // fallback: no year found
+      authorsRaw = original;
+      year = '';
+      rest = '';
+    }
+
+    const {authors, etAl} = parseAuthors(authorsRaw);
+
+    const src = {
+      guid: genGuid(),
+      year,
+      title:'', journalName:'', publisher:'', city:'', volume:'', issue:'', pages:'',
+      authors, etAl,
+      sourceType: 'Misc'
+    };
+
+    // Case A: quoted title -> journal article style
+    const quoteMatch = rest.match(/^['"“]([^'"”]+)['"”]\s*,?\s*(.*)$/);
+    if(quoteMatch){
+      src.title = quoteMatch[1].trim();
+      let remainder = quoteMatch[2].trim();
+
+      const volIssue = parseVolumeIssue(remainder);
+      const pagesInfo = parsePages(remainder);
+
+      // Strip pages and volume/issue out to isolate journal name
+      let journalPart = remainder;
+      if(pagesInfo) journalPart = journalPart.replace(pagesInfo.full, '');
+      if(volIssue) journalPart = journalPart.replace(volIssue.full, '');
+      journalPart = journalPart.replace(/,\s*,/g, ',').replace(/,\s*$/, '').trim();
+      // journal name is text up to first comma (before volume) — take first chunk
+      journalPart = journalPart.split(',')[0].trim();
+      journalPart = journalPart.replace(/\.$/,'').trim();
+
+      src.journalName = journalPart;
+      if(volIssue){ src.volume = volIssue.volume; src.issue = volIssue.issue; }
+      if(pagesInfo){ src.pages = pagesInfo.pages; }
+      src.sourceType = 'JournalArticle';
+    } else if(rest.length) {
+      // Case B: no quoted title -> book / report style: "Title. City: Publisher."
+      // First sentence = title
+      const sentenceSplit = rest.split(/\.\s+/);
+      src.title = (sentenceSplit[0] || rest).replace(/\.$/,'').trim();
+      const remainder = sentenceSplit.slice(1).join('. ').trim();
+
+      const cityPub = remainder.match(/^([A-Za-z .]+?):\s*(.+?)\.?$/);
+      if(cityPub){
+        src.city = cityPub[1].trim();
+        src.publisher = cityPub[2].replace(/\.$/,'').trim();
+        src.sourceType = 'Report';
+      } else if(remainder.length){
+        src.publisher = remainder.replace(/\.$/,'').trim();
+        src.sourceType = 'Report';
+      } else {
+        src.sourceType = 'Misc';
+      }
+    }
+
+    return src;
+  }
+
+  function makeTag(src, usedTags){
+    let base = (src.authors[0] && src.authors[0].last) ? src.authors[0].last.replace(/[^A-Za-z]/g,'') : 'Ref';
+    base = base.slice(0,3);
+    let yy = src.year ? src.year.slice(-2) : '';
+    let tag = base + yy;
+    let suffix = '';
+    let i = 0;
+    while(usedTags.has(tag + suffix)){
+      i++;
+      suffix = String.fromCharCode(96+i); // a, b, c...
+    }
+    tag = tag + suffix;
+    usedTags.add(tag);
+    return tag;
+  }
+
+  function buildAuthorXml(authors){
+    let people = authors.map(a=>{
+      let p = '<b:Person>';
+      p += '<b:Last>' + escapeXml(a.last) + '</b:Last>';
+      if(a.first) p += '<b:First>' + escapeXml(a.first) + '</b:First>';
+      if(a.middle) p += '<b:Middle>' + escapeXml(a.middle) + '</b:Middle>';
+      p += '</b:Person>';
+      return p;
+    }).join('');
+    return '<b:Author><b:Author><b:NameList>' + people + '</b:NameList></b:Author></b:Author>';
+  }
+
+  function buildSourceXml(src, tag){
+    let xml = '<b:Source>';
+    xml += '<b:Tag>' + escapeXml(tag) + '</b:Tag>';
+    xml += '<b:SourceType>' + src.sourceType + '</b:SourceType>';
+    xml += '<b:Guid>' + src.guid + '</b:Guid>';
+    if(src.title) xml += '<b:Title>' + escapeXml(src.title) + '</b:Title>';
+    if(src.year) xml += '<b:Year>' + escapeXml(src.year.replace(/[a-z]$/,'')) + '</b:Year>';
+    if(src.journalName) xml += '<b:JournalName>' + escapeXml(src.journalName) + '</b:JournalName>';
+    xml += buildAuthorXml(src.authors);
+    if(src.volume) xml += '<b:Volume>' + escapeXml(src.volume) + '</b:Volume>';
+    if(src.issue) xml += '<b:Issue>' + escapeXml(src.issue) + '</b:Issue>';
+    if(src.pages) xml += '<b:Pages>' + escapeXml(src.pages) + '</b:Pages>';
+    if(src.city) xml += '<b:City>' + escapeXml(src.city) + '</b:City>';
+    if(src.publisher) xml += '<b:Publisher>' + escapeXml(src.publisher) + '</b:Publisher>';
+    xml += '</b:Source>';
+    return xml;
+  }
+
+  let lastXml = '';
+
+  function convert(){
+    const lines = input.value.split('\n').map(l=>l.trim()).filter(Boolean);
+    const usedTags = new Set();
+    const warnings = [];
+    const sourceXmls = [];
+
+    lines.forEach((line, idx)=>{
+      const src = parseOneReference(line);
+      if(!src) return;
+      if(!src.year){
+        warnings.push('Line ' + (idx+1) + ': no (year) found — check formatting: "' + line.slice(0,60) + (line.length>60?'…':'') + '"');
+      }
+      if(!src.title){
+        warnings.push('Line ' + (idx+1) + ': could not identify a title.');
+      }
+      const tag = makeTag(src, usedTags);
+      sourceXmls.push(buildSourceXml(src, tag));
+    });
+
+    const xml = '<?xml version="1.0"?>\n' +
+      '<b:Sources SelectedStyle="" xmlns:b="http://schemas.openxmlformats.org/officeDocument/2006/bibliography" xmlns="http://schemas.openxmlformats.org/officeDocument/2006/bibliography">' +
+      sourceXmls.join('') +
+      '</b:Sources>';
+
+    lastXml = xml;
+
+    if(sourceXmls.length){
+      output.textContent = xml;
+      output.style.display = 'block';
+      emptyState.style.display = 'none';
+      copyBtn.disabled = false;
+      downloadBtn.disabled = false;
+    } else {
+      output.style.display = 'none';
+      emptyState.style.display = 'block';
+      copyBtn.disabled = true;
+      downloadBtn.disabled = true;
+    }
+
+    outCount.textContent = sourceXmls.length + (sourceXmls.length === 1 ? ' source' : ' sources');
+
+    if(warnings.length){
+      warningsBox.innerHTML = warnings.map(w=>'⚠ ' + escapeXml(w)).join('<br>');
+      warningsBox.classList.add('show');
+    } else {
+      warningsBox.classList.remove('show');
+    }
+
+    status.textContent = 'Converted ' + sourceXmls.length + ' of ' + lines.length + ' line(s).';
+  }
+
+  convertBtn.addEventListener('click', convert);
+
+  copyBtn.addEventListener('click', async ()=>{
+    if(!lastXml) return;
+    try{
+      await navigator.clipboard.writeText(lastXml);
+      status.textContent = 'XML copied to clipboard.';
+    }catch(e){
+      // fallback
+      const ta = document.createElement('textarea');
+      ta.value = lastXml;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      status.textContent = 'XML copied to clipboard.';
+    }
+  });
+
+  downloadBtn.addEventListener('click', ()=>{
+    if(!lastXml) return;
+    const blob = new Blob([lastXml], {type:'application/xml'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'Sources.xml';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    status.textContent = 'Downloaded Sources.xml';
+  });
+})();
+</script>
+</body>
+</html>
