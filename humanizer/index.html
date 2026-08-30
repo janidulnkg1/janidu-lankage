@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Redline — make it sound human</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#EDE7DC;
+    --ink-dim:#B8AF9E;
+    --paper:#1B1A17;
+    --paper-raised:#232019;
+    --paper-line:#3A362E;
+    --red:#C1401F;
+    --red-bright:#E15A32;
+    --red-dim:#5C2E1F;
+    --focus:#E8DFC9;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Source Serif 4', serif;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:48px 24px 80px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  .masthead{
+    width:100%;
+    max-width:1180px;
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    border-bottom:1px solid var(--paper-line);
+    padding-bottom:18px;
+    margin-bottom:36px;
+  }
+
+  .masthead h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-optical-sizing:auto;
+    font-size:clamp(28px, 4vw, 42px);
+    margin:0;
+    letter-spacing:-0.01em;
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+  }
+
+  .masthead h1 .mark{
+    color:var(--red);
+    font-style:italic;
+    font-weight:500;
+  }
+
+  .masthead .tagline{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+  }
+
+  .desk{
+    width:100%;
+    max-width:1180px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0;
+    border:1px solid var(--paper-line);
+    background:var(--paper-raised);
+    position:relative;
+  }
+
+  .desk::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:0;
+    bottom:0;
+    width:1px;
+    background:var(--paper-line);
+  }
+
+  @media (max-width: 860px){
+    .desk{grid-template-columns:1fr;}
+    .desk::after{display:none;}
+    .pane + .pane{border-top:1px solid var(--paper-line);}
+  }
+
+  .pane{
+    display:flex;
+    flex-direction:column;
+    min-height:460px;
+  }
+
+  .pane-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 24px;
+    border-bottom:1px solid var(--paper-line);
+  }
+
+  .pane-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink-dim);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .pane-label .dot{
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:var(--ink-dim);
+  }
+
+  .pane-label.active .dot{background:var(--red-bright);}
+
+  .count{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--ink-dim);
+  }
+
+  textarea{
+    flex:1;
+    resize:none;
+    border:none;
+    outline:none;
+    background:transparent;
+    color:var(--ink);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14.5px;
+    line-height:1.7;
+    padding:22px 24px 24px;
+  }
+
+  textarea::placeholder{color:#6b6558;}
+
+  textarea:focus-visible{
+    box-shadow:inset 0 0 0 2px var(--focus);
+  }
+
+  #output{
+    flex:1;
+    padding:22px 24px 24px;
+    font-family:'Source Serif 4', serif;
+    font-size:16px;
+    line-height:1.75;
+    white-space:pre-wrap;
+    overflow-y:auto;
+  }
+
+  #output.empty{
+    color:#6b6558;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    line-height:1.7;
+  }
+
+  #output .cursor-blink{
+    display:inline-block;
+    width:2px;
+    height:1em;
+    background:var(--red-bright);
+    vertical-align:text-bottom;
+    animation:blink 1s steps(1) infinite;
+    margin-left:1px;
+  }
+
+  @keyframes blink{
+    50%{opacity:0;}
+  }
+
+  .controls{
+    width:100%;
+    max-width:1180px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    margin-top:20px;
+    flex-wrap:wrap;
+  }
+
+  .hint{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--ink-dim);
+    max-width:520px;
+    line-height:1.6;
+  }
+
+  .btn-group{
+    display:flex;
+    gap:10px;
+  }
+
+  button{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:13px 22px;
+    border-radius:2px;
+    cursor:pointer;
+    border:1px solid var(--paper-line);
+    background:transparent;
+    color:var(--ink);
+    transition:border-color 0.15s ease, color 0.15s ease, background 0.15s ease;
+  }
+
+  button:hover:not(:disabled){
+    border-color:var(--ink-dim);
+  }
+
+  button:disabled{
+    opacity:0.4;
+    cursor:not-allowed;
+  }
+
+  #editBtn{
+    background:var(--red);
+    border-color:var(--red);
+    color:#FBF3EA;
+    font-weight:600;
+    padding:13px 28px;
+  }
+
+  #editBtn:hover:not(:disabled){
+    background:var(--red-bright);
+    border-color:var(--red-bright);
+  }
+
+  #copyBtn.copied{
+    border-color:var(--red-bright);
+    color:var(--red-bright);
+  }
+
+  .error-banner{
+    width:100%;
+    max-width:1180px;
+    margin-top:16px;
+    padding:14px 18px;
+    border:1px solid var(--red-dim);
+    background:rgba(193,64,31,0.08);
+    color:#E8B9A8;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    line-height:1.6;
+    display:none;
+  }
+
+  .error-banner.show{display:block;}
+
+  #modelSelect{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    background:var(--paper-raised);
+    border:1px solid var(--paper-line);
+    color:var(--ink);
+    padding:5px 8px;
+    border-radius:2px;
+    max-width:220px;
+    outline:none;
+  }
+
+  #modelSelect:focus-visible{
+    border-color:var(--red-bright);
+  }
+
+  #modelSelect:disabled{
+    color:var(--ink-dim);
+  }
+
+  #styleSelect{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    background:var(--paper-raised);
+    border:1px solid var(--paper-line);
+    color:var(--ink);
+    padding:5px 8px;
+    border-radius:2px;
+    max-width:280px;
+    outline:none;
+  }
+
+  #styleSelect:focus-visible{
+    border-color:var(--red-bright);
+  }
+
+  .hint br + label{
+    display:inline-block;
+    margin-top:10px;
+  }
+
+  #refreshModelsBtn{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    padding:4px 9px;
+    border-radius:2px;
+    line-height:1;
+    text-transform:none;
+    letter-spacing:0;
+    margin-left:2px;
+  }
+
+  .site-footer{
+    width:100%;
+    max-width:1180px;
+    margin-top:56px;
+    padding-top:18px;
+    border-top:1px solid var(--paper-line);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--ink-dim);
+  }
+
+  .site-footer .brand strong{
+    color:var(--ink);
+    font-weight:600;
+  }
+
+  .site-footer .meta{
+    letter-spacing:0.02em;
+  }
+
+  .stamp{
+    display:inline-block;
+    margin-left:10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px;
+    letter-spacing:0.1em;
+    color:var(--red-bright);
+    border:1px solid var(--red-dim);
+    padding:2px 6px;
+    transform:rotate(-2deg);
+    opacity:0;
+    transition:opacity 0.3s ease;
+  }
+
+  .stamp.show{opacity:1;}
+</style>
+</head>
+<body>
+
+  <div class="masthead">
+    <h1>Redline<span class="mark">/edit</span></h1>
+    <div class="tagline">Strip the stiffness. Keep the meaning.</div>
+  </div>
+
+  <div class="desk">
+    <div class="pane">
+      <div class="pane-head">
+        <div class="pane-label" id="draftLabel"><span class="dot"></span>Draft</div>
+        <div class="count" id="inCount">0 words</div>
+      </div>
+      <textarea id="input" placeholder="Paste the text you want edited — a paragraph, an email, a report. Anything that reads a little too stiff."></textarea>
+    </div>
+    <div class="pane">
+      <div class="pane-head">
+        <div class="pane-label" id="outLabel"><span class="dot"></span>Edited<span class="stamp" id="stamp">DONE</span></div>
+        <div class="count" id="outCount"></div>
+      </div>
+      <div id="output" class="empty">Your edited version will show up here, ready to copy.</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <div class="hint">Redline rewrites your draft the way a good human editor would — natural rhythm, plain words, no robotic filler — without changing what you meant to say.<br>Runs on your local Ollama server. <label for="modelSelect" style="color:var(--ink);">Model:</label> <select id="modelSelect"><option value="">Loading…</option></select><button id="refreshModelsBtn" title="Refresh model list" type="button">↻</button><br><label for="styleSelect" style="color:var(--ink);">Style:</label> <select id="styleSelect"></select></div>
+    <div class="btn-group">
+      <button id="copyBtn" disabled>Copy</button>
+      <button id="editBtn">Edit it</button>
+    </div>
+  </div>
+
+  <div class="error-banner" id="errorBanner"></div>
+
+  <footer class="site-footer">
+    <span class="brand">Built by <strong>Janidu Lankage</strong></span>
+    <span class="meta">&copy; 2026 Janidu Lankage. All rights reserved.</span>
+  </footer>
+
+<script>
+  const input = document.getElementById('input');
+  const output = document.getElementById('output');
+  const editBtn = document.getElementById('editBtn');
+  const copyBtn = document.getElementById('copyBtn');
+  const inCount = document.getElementById('inCount');
+  const outCount = document.getElementById('outCount');
+  const draftLabel = document.getElementById('draftLabel');
+  const outLabel = document.getElementById('outLabel');
+  const errorBanner = document.getElementById('errorBanner');
+  const stamp = document.getElementById('stamp');
+  const modelSelect = document.getElementById('modelSelect');
+  const refreshModelsBtn = document.getElementById('refreshModelsBtn');
+  const styleSelect = document.getElementById('styleSelect');
+
+  const HUMANIZER_STYLES = [
+    {
+      title: "1. The Professional AI Humanizer",
+      prompt: "Act as a professional human – writing editor. Rewrite the following text to sound natural, human, and conversational. Remove robotic phrasing, stiff structure, and unnatural flow while keeping the original meaning intact."
+    },
+    {
+      title: "2. Natural Human Tone Converter",
+      prompt: "Rewrite this text so it sounds natural, confident, and genuinely human. Improve the sentence flow, word choice, and rhythm while avoiding robotic or overly formal language. Keep the original meaning intact."
+    },
+    {
+      title: "3. AI-Style Writing Fixer",
+      prompt: "Rewrite this text to remove stiff, repetitive, or predictable AI-style phrasing. Vary sentence structure, improve transitions, and make the writing feel natural and authentic without adding unnecessary fluff or changing the message."
+    },
+    {
+      title: "4. Conversational Rewrite",
+      prompt: "Rewrite the following content in a conversational, warm, and natural voice, as if an experienced person were explaining it to someone directly. Keep it professional, clear, and approachable."
+    },
+    {
+      title: "5. Emotion & Flow Editor",
+      prompt: "Edit this text to add subtle emotion, stronger flow, and natural emphasis. Remove monotonous phrasing and make the writing feel engaging, thoughtful, and expressive without overdoing it."
+    },
+    {
+      title: "6. Simple Human Language Converter",
+      prompt: "Rewrite this text using simple, clear, and natural language. Remove unnecessary jargon, awkward wording, and repetitive sentence patterns while keeping the original message and key information unchanged."
+    },
+    {
+      title: "7. Human Rhythm & Style Fixer",
+      prompt: "Edit this text to improve its natural rhythm and overall writing style. Vary sentence lengths, improve pacing, remove repetition, and make the wording feel less predictable and more naturally written."
+    },
+    {
+      title: "8. Final Human-Style Editor",
+      prompt: "Take the draft below and turn it into a polished, natural-sounding final version. Improve the tone, flow, phrasing, sentence structure, and overall readability while preserving the original meaning and personality."
+    }
+  ];
+
+  function loadStyles(){
+    styleSelect.innerHTML = '';
+    HUMANIZER_STYLES.forEach((s, i) => {
+      const opt = document.createElement('option');
+      opt.value = i;
+      opt.textContent = s.title;
+      styleSelect.appendChild(opt);
+    });
+  }
+  loadStyles();
+
+  async function loadModels(){
+    modelSelect.disabled = true;
+    modelSelect.innerHTML = '<option value="">Loading…</option>';
+    clearError();
+    try{
+      const res = await fetch("http://127.0.0.1:11434/api/tags");
+      if(!res.ok){
+        throw new Error('status ' + res.status);
+      }
+      const data = await res.json();
+      const models = (data.models || []).map(m => m.name || m.model).filter(Boolean);
+
+      if(models.length === 0){
+        modelSelect.innerHTML = '<option value="">No models installed</option>';
+        showError('Ollama is running but has no models pulled yet. Run something like "ollama pull llama3.1" in a terminal, then hit ↻.');
+        return;
+      }
+
+      modelSelect.innerHTML = '';
+      models.forEach(name => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        opt.textContent = name;
+        modelSelect.appendChild(opt);
+      });
+      modelSelect.disabled = false;
+
+    } catch(err){
+      modelSelect.innerHTML = '<option value="">Ollama not reachable</option>';
+      showError(`Couldn't reach Ollama at 127.0.0.1:11434 to list models. Make sure "ollama serve" is running and reachable from this page (check OLLAMA_ORIGINS if this page isn't on localhost), then hit ↻.`);
+    }
+  }
+
+  refreshModelsBtn.addEventListener('click', loadModels);
+  loadModels();
+
+  function wordCount(text){
+    const t = text.trim();
+    if(!t) return 0;
+    return t.split(/\s+/).length;
+  }
+
+  input.addEventListener('input', () => {
+    const n = wordCount(input.value);
+    inCount.textContent = n + (n === 1 ? ' word' : ' words');
+    draftLabel.classList.toggle('active', n > 0);
+  });
+
+  function showError(msg){
+    errorBanner.textContent = msg;
+    errorBanner.classList.add('show');
+  }
+
+  function clearError(){
+    errorBanner.classList.remove('show');
+    errorBanner.textContent = '';
+  }
+
+  async function editText(){
+    const draft = input.value.trim();
+    if(!draft){
+      showError('Paste something in first — there\'s nothing to edit yet.');
+      return;
+    }
+
+    clearError();
+    stamp.classList.remove('show');
+    copyBtn.disabled = true;
+    copyBtn.classList.remove('copied');
+    copyBtn.textContent = 'Copy';
+    editBtn.disabled = true;
+    editBtn.textContent = 'Editing…';
+    outLabel.classList.add('active');
+    output.classList.remove('empty');
+    output.innerHTML = '<span class="cursor-blink"></span>';
+    outCount.textContent = '';
+
+    const selectedStyle = HUMANIZER_STYLES[styleSelect.value] || HUMANIZER_STYLES[0];
+    const systemPrompt = `${selectedStyle.prompt} Do not add new claims or drop important information. Do not add commentary, notes, or explanations of what you changed. Respond with ONLY the rewritten text and nothing else — no preamble, no quotation marks around it, no markdown formatting.`;
+
+    const model = modelSelect.value;
+    if(!model){
+      showError('Pick an installed model from the dropdown first (or hit ↻ if the list looks empty).');
+      output.classList.add('empty');
+      output.textContent = 'Your edited version will show up here, ready to copy.';
+      editBtn.disabled = false;
+      editBtn.textContent = 'Edit it';
+      outLabel.classList.remove('active');
+      return;
+    }
+
+    try{
+      const response = await fetch("http://127.0.0.1:11434/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          model: model,
+          stream: false,
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: draft }
+          ]
+        })
+      });
+
+      if(!response.ok){
+        if(response.status === 404){
+          throw new Error(`Model "${model}" wasn't found by Ollama. Hit ↻ to refresh the list.`);
+        }
+        throw new Error('Ollama request failed with status ' + response.status);
+      }
+
+      const data = await response.json();
+      const result = (data.message && data.message.content) ? data.message.content.trim() : '';
+
+      if(!result){
+        throw new Error('No text came back — try again.');
+      }
+
+      output.textContent = result;
+      const n = wordCount(result);
+      outCount.textContent = n + (n === 1 ? ' word' : ' words');
+      copyBtn.disabled = false;
+      stamp.classList.add('show');
+
+    } catch(err){
+      output.classList.add('empty');
+      output.textContent = 'Something went wrong editing this — try again in a moment.';
+      let msg = err.message;
+      if(err instanceof TypeError){
+        msg = `Couldn't reach Ollama at 127.0.0.1:11434. Make sure "ollama serve" is running, and that it's launched with OLLAMA_ORIGINS set to allow this page (browsers block cross-origin requests to localhost by default).`;
+      }
+      showError('Edit failed: ' + msg);
+    } finally {
+      editBtn.disabled = false;
+      editBtn.textContent = 'Edit it';
+    }
+  }
+
+  async function copyOutput(){
+    const text = output.textContent;
+    if(!text) return;
+    try{
+      await navigator.clipboard.writeText(text);
+      copyBtn.textContent = 'Copied';
+      copyBtn.classList.add('copied');
+      setTimeout(() => {
+        copyBtn.textContent = 'Copy';
+        copyBtn.classList.remove('copied');
+      }, 1800);
+    } catch(err){
+      showError('Couldn\'t copy automatically — select the text and copy it manually.');
+    }
+  }
+
+  editBtn.addEventListener('click', editText);
+  copyBtn.addEventListener('click', copyOutput);
+
+  input.addEventListener('keydown', (e) => {
+    if((e.metaKey || e.ctrlKey) && e.key === 'Enter'){
+      e.preventDefault();
+      editText();
+    }
+  });
+</script>
+
+</body>
+</html>
