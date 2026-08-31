@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Telltale — a lie detector for language</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --void: #140F22;
+    --void-2: #1B1530;
+    --border: #2E2748;
+    --text: #EDE9F7;
+    --muted: #8F87AE;
+    --muted-dim: #635C7F;
+
+    --paper: #F1E8D6;
+    --paper-line: #d8c9a3;
+    --ink: #241C10;
+
+    --human: #FF6E5A;
+    --ai: #8C7CFF;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0;
+    background:var(--void);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:64px 20px 100px;
+    background-image:
+      radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+    background-size: 26px 26px;
+  }
+
+  .frame{ width:100%; max-width:720px; }
+
+  header{ margin-bottom:44px; }
+
+  .wordmark{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:700;
+    font-size:56px;
+    line-height:1;
+    letter-spacing:-0.01em;
+    margin:0 0 10px;
+  }
+  .wordmark .dot{ color:var(--ai); }
+
+  .tagline{
+    font-size:16px;
+    color:var(--muted);
+    max-width:44ch;
+    line-height:1.5;
+  }
+
+  .controls{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    align-items:center;
+    margin:36px 0 8px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+  }
+
+  .controls label{ color:var(--muted-dim); }
+
+  select, .icon-btn{
+    background:var(--void-2);
+    border:1px solid var(--border);
+    color:var(--text);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:13px;
+    padding:9px 12px;
+    border-radius:6px;
+  }
+  select{ flex:1; min-width:160px; }
+  select:focus-visible, .icon-btn:focus-visible, textarea:focus-visible, button:focus-visible, input:focus-visible{
+    outline:2px solid var(--ai);
+    outline-offset:2px;
+  }
+
+  .icon-btn{ cursor:pointer; color:var(--muted); }
+  .icon-btn:hover{ color:var(--text); border-color:var(--ai); }
+
+  .host-row{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    color:var(--muted-dim);
+    margin-bottom:34px;
+    display:flex;
+    gap:8px;
+    align-items:center;
+  }
+  .host-row input{
+    background:transparent;
+    border:none;
+    border-bottom:1px dashed var(--border);
+    color:var(--muted-dim);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    padding:2px 2px;
+    width:220px;
+  }
+  .host-row input:focus{ color:var(--text); }
+
+  .paper-card{
+    position:relative;
+    background:var(--paper);
+    color:var(--ink);
+    border-radius:3px;
+    transform:rotate(-0.6deg);
+    box-shadow: 0 24px 50px -20px rgba(0,0,0,0.55), 0 2px 0 rgba(0,0,0,0.15);
+    padding:26px 26px 26px 58px;
+  }
+  .paper-card::before{
+    content:'';
+    position:absolute;
+    top:0; bottom:0; left:40px;
+    width:1px;
+    background:#c8503f;
+    opacity:0.55;
+  }
+
+  textarea{
+    width:100%;
+    min-height:230px;
+    resize:vertical;
+    background:
+      repeating-linear-gradient(
+        var(--paper),
+        var(--paper) 30px,
+        var(--paper-line) 31px,
+        var(--paper) 32px
+      );
+    border:none;
+    color:var(--ink);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14.5px;
+    line-height:32px;
+    padding-top:2px;
+  }
+  textarea:focus{ outline:none; }
+  textarea::placeholder{ color:#a99c7c; }
+
+  .action-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-top:18px;
+    margin-bottom:48px;
+  }
+
+  .char-count{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--muted-dim);
+  }
+
+  button.run{
+    background:var(--ai);
+    color:#0E0A20;
+    border:none;
+    font-family:'Fraunces', serif;
+    font-weight:700;
+    font-size:16px;
+    padding:13px 26px;
+    border-radius:6px;
+    cursor:pointer;
+  }
+  button.run:hover{ background:#a598ff; }
+  button.run:disabled{ background:var(--border); color:var(--muted-dim); cursor:not-allowed; }
+
+  .status{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12.5px;
+    margin-top:-30px;
+    margin-bottom:30px;
+    min-height:16px;
+  }
+  .status.err{ color:var(--human); }
+  .status.ok{ color:var(--muted); }
+
+  .result{
+    display:none;
+    border-top:1px solid var(--border);
+    padding-top:40px;
+  }
+  .result.visible{
+    display:block;
+    animation: rise 0.5s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(10px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  .verdict{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-weight:700;
+    font-size:44px;
+    line-height:1.1;
+    margin-bottom:22px;
+  }
+  .verdict .num{ font-style:normal; }
+  .verdict.hi{ color:var(--human); }
+  .verdict.lo{ color:var(--ai); }
+  .verdict.mid{ color:var(--text); }
+
+  .gauge-track{
+    position:relative;
+    height:8px;
+    border-radius:5px;
+    background:linear-gradient(90deg, var(--human), #6b5fae 50%, var(--ai));
+    margin-bottom:6px;
+  }
+  .gauge-marker{
+    position:absolute;
+    top:50%;
+    left:0%;
+    width:16px; height:16px;
+    background:var(--void);
+    border:3px solid var(--text);
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+    transition:left 0.7s cubic-bezier(.2,.8,.2,1);
+    box-shadow:0 0 0 4px var(--void), 0 0 14px rgba(255,255,255,0.35);
+  }
+
+  .gauge-labels{
+    display:flex;
+    justify-content:space-between;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    color:var(--muted-dim);
+    margin-bottom:34px;
+  }
+
+  .reasoning h4{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--muted-dim);
+    font-weight:500;
+    margin:0 0 10px;
+  }
+  .reasoning p{
+    font-size:15.5px;
+    line-height:1.7;
+    color:var(--text);
+    max-width:60ch;
+    margin:0;
+  }
+
+  .disclaimer{
+    margin-top:64px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    line-height:1.6;
+    color:var(--muted-dim);
+    border-top:1px solid var(--border);
+    padding-top:18px;
+    max-width:64ch;
+  }
+
+  .spinner{
+    display:inline-block;
+    width:12px; height:12px;
+    border:2px solid var(--border);
+    border-top-color:var(--ai);
+    border-radius:50%;
+    animation:spin 0.7s linear infinite;
+    vertical-align:-2px;
+    margin-right:6px;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  @media (prefers-reduced-motion: reduce){
+    .result.visible{ animation:none; }
+    .gauge-marker{ transition:none; }
+    .spinner{ animation:none; }
+  }
+
+  @media (max-width: 480px){
+    .wordmark{ font-size:42px; }
+    .paper-card{ padding:20px 18px 20px 42px; }
+    .paper-card::before{ left:26px; }
+  }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <header>
+    <h1 class="wordmark">telltale<span class="dot">.</span></h1>
+    <p class="tagline">A lie detector for language. Paste any passage and a model running on your own machine will read it for the tells.</p>
+  </header>
+
+  <div class="controls">
+    <label for="model">model</label>
+    <select id="model"><option value="">loading…</option></select>
+    <button class="icon-btn" id="refresh" title="refresh model list">⟳</button>
+  </div>
+
+  <div class="host-row">
+    <span>ollama host</span>
+    <input id="host" type="text" value="http://localhost:11434" spellcheck="false">
+  </div>
+
+  <div class="paper-card">
+    <textarea id="inputText" placeholder="Paste the passage you want interrogated…"></textarea>
+  </div>
+
+  <div class="action-row">
+    <div class="char-count" id="charCount">0 characters</div>
+    <button class="run" id="analyzeBtn">Run the test</button>
+  </div>
+
+  <div class="status" id="status"></div>
+
+  <div class="result" id="result">
+    <div class="verdict" id="verdict">—</div>
+
+    <div class="gauge-track"><div class="gauge-marker" id="gaugeMarker"></div></div>
+    <div class="gauge-labels">
+      <span>human</span>
+      <span id="gaugeValue">0%</span>
+      <span>synthetic</span>
+    </div>
+
+    <div class="reasoning">
+      <h4>what gave it away</h4>
+      <p id="reasoningText"></p>
+    </div>
+  </div>
+
+  <div class="disclaimer">
+    This reading comes from asking a local language model for its opinion — a heuristic, not a forensic measurement. AI detectors of every kind (this one included) get shakier on short passages, heavily edited text, and non-native English. Don't treat it as sole evidence of anything.
+  </div>
+
+</div>
+
+<script>
+  const hostInput = document.getElementById('host');
+  const modelSelect = document.getElementById('model');
+  const refreshBtn = document.getElementById('refresh');
+  const inputText = document.getElementById('inputText');
+  const charCount = document.getElementById('charCount');
+  const analyzeBtn = document.getElementById('analyzeBtn');
+  const statusEl = document.getElementById('status');
+  const resultEl = document.getElementById('result');
+  const gaugeValue = document.getElementById('gaugeValue');
+  const gaugeMarker = document.getElementById('gaugeMarker');
+  const verdictEl = document.getElementById('verdict');
+  const reasoningText = document.getElementById('reasoningText');
+
+  function getHost(){
+    return hostInput.value.trim().replace(/\/$/, '') || 'http://localhost:11434';
+  }
+
+  inputText.addEventListener('input', () => {
+    charCount.textContent = inputText.value.length + ' characters';
+  });
+
+  async function loadModels(){
+    modelSelect.innerHTML = '<option value="">loading…</option>';
+    statusEl.textContent = '';
+    statusEl.className = 'status';
+    try{
+      const res = await fetch(getHost() + '/api/tags');
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const models = data.models || [];
+      if(models.length === 0){
+        modelSelect.innerHTML = '<option value="">no models found</option>';
+        statusEl.textContent = 'No models installed. Try "ollama pull llama3.1" in your terminal.';
+        statusEl.className = 'status err';
+        return;
+      }
+      modelSelect.innerHTML = '';
+      models.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.name;
+        opt.textContent = m.name;
+        modelSelect.appendChild(opt);
+      });
+    }catch(err){
+      modelSelect.innerHTML = '<option value="">unavailable</option>';
+      statusEl.innerHTML = 'Could not reach Ollama at ' + getHost() +
+        '. Make sure Ollama is running and allows this origin — start it with ' +
+        '<code>OLLAMA_ORIGINS=*</code> set, or serve this file instead of opening it as a local file.';
+      statusEl.className = 'status err';
+    }
+  }
+
+  refreshBtn.addEventListener('click', loadModels);
+  hostInput.addEventListener('change', loadModels);
+  loadModels();
+
+  function buildPrompt(text){
+    return `You are a careful AI-text detection analyst. Assess the likelihood that the following passage was generated by an AI language model, as opposed to written by a human.
+
+Respond with ONLY a JSON object, no other text, no markdown fences, matching exactly this shape:
+{"ai_probability": <integer 0-100>, "reasoning": "<2-4 sentences explaining the key signals you noticed, referencing specific traits of the passage such as sentence rhythm, word choice, structure, or content>"}
+
+Passage to assess:
+"""
+${text}
+"""`;
+  }
+
+  function setLoading(isLoading){
+    analyzeBtn.disabled = isLoading;
+    analyzeBtn.textContent = isLoading ? 'Reading…' : 'Run the test';
+  }
+
+  function extractJson(raw){
+    const cleaned = raw.replace(/```json|```/g, '').trim();
+    const match = cleaned.match(/\{[\s\S]*\}/);
+    if(!match) throw new Error('no JSON in response');
+    return JSON.parse(match[0]);
+  }
+
+  analyzeBtn.addEventListener('click', async () => {
+    const text = inputText.value.trim();
+    const model = modelSelect.value;
+    statusEl.textContent = '';
+    statusEl.className = 'status';
+
+    if(!model){
+      statusEl.textContent = 'Select a model first.';
+      statusEl.className = 'status err';
+      return;
+    }
+    if(text.length < 20){
+      statusEl.textContent = 'Paste at least a sentence or two — very short text is unreliable to judge.';
+      statusEl.className = 'status err';
+      return;
+    }
+
+    setLoading(true);
+    resultEl.classList.remove('visible');
+    statusEl.innerHTML = '<span class="spinner"></span>' + model + ' is reading…';
+    statusEl.className = 'status ok';
+
+    try{
+      const res = await fetch(getHost() + '/api/generate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          model: model,
+          prompt: buildPrompt(text),
+          stream: false,
+          format: 'json',
+          options: { temperature: 0.2 }
+        })
+      });
+      if(!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const parsed = extractJson(data.response || '');
+
+      let pct = Math.round(Number(parsed.ai_probability));
+      if(isNaN(pct)) throw new Error('model did not return a usable score');
+      pct = Math.max(0, Math.min(100, pct));
+
+      gaugeValue.textContent = pct + '%';
+      gaugeMarker.style.left = pct + '%';
+      reasoningText.textContent = parsed.reasoning || '(no reasoning given)';
+
+      verdictEl.className = 'verdict';
+      if(pct >= 70){
+        verdictEl.innerHTML = 'Likely <span class="num">' + pct + '%</span> synthetic';
+        verdictEl.classList.add('hi');
+      } else if(pct <= 30){
+        verdictEl.innerHTML = 'Likely <span class="num">' + (100-pct) + '%</span> human';
+        verdictEl.classList.add('lo');
+      } else {
+        verdictEl.innerHTML = 'Too close to call';
+        verdictEl.classList.add('mid');
+      }
+
+      resultEl.classList.add('visible');
+      statusEl.textContent = '';
+    }catch(err){
+      statusEl.textContent = 'Analysis failed: ' + err.message;
+      statusEl.className = 'status err';
+    }finally{
+      setLoading(false);
+    }
+  });
+</script>
+</body>
+</html>
