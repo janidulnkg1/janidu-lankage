@@ -356,7 +356,13 @@
     transform-style:preserve-3d; will-change:transform;
   }
   .cert-card:hover{ box-shadow:0 20px 46px -14px var(--shadow); }
-  .cert-card img{ width:100%; height:150px; object-fit:cover; border-bottom:1px solid var(--glass-border); }
+  .cert-card img{
+    width:100%; height:190px; object-fit:contain; object-position:center;
+    background:var(--surface-2);
+    padding:10px;
+    border-bottom:1px solid var(--glass-border);
+  }
+  @media(max-width:480px){ .cert-card img{ height:160px; } }
   .cert-card .cc-body{ padding:14px 16px; }
   .cert-card h4{ font-size:14.5px; line-height:1.4; }
   .cert-card .cc-meta{ font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--accent); margin-top:6px; display:block; }
