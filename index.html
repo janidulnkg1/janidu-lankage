@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Janidu Lankage</title>
+<title>Janidu Lankage — Software Engineer & Educator</title>
 <meta name="description" content="Portfolio of Janidu Lankage — .NET Core software engineer and Cambridge/Edexcel Computer Science educator.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
     --line:rgba(27,42,34,0.16);
     --shadow:rgba(27,35,29,0.20);
     --grid-line:rgba(27,42,34,0.06);
-    --glass-bg:rgba(67, 1, 1, 0.42);
+    --glass-bg:rgba(255,255,255,0.42);
     --glass-bg-strong:rgba(255,255,255,0.62);
     --glass-border:rgba(255,255,255,0.55);
     --glass-blur:18px;
@@ -82,7 +82,7 @@
   @media(max-width:480px){ body{ font-size:15.5px; } }
 
   /* ---- ambient glass blobs ---- */
-  .blob-field{ position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+  .blob-field{ position:fixed; inset:0; z-index:-2; overflow:hidden; pointer-events:none; }
   .blob{
     position:absolute; border-radius:50%; filter:blur(70px); opacity:.38;
     animation:drift 26s ease-in-out infinite alternate;
@@ -97,6 +97,11 @@
     100%{ transform:translate(-5%,-3%) scale(0.96); }
   }
   @media (prefers-reduced-motion:reduce){ .blob{ animation:none; } }
+
+  /* ---- particle field ---- */
+  #particles-js{ position:fixed; inset:0; z-index:-1; pointer-events:none; }
+  #particles-js canvas{ display:block; }
+
   header.nav, main, footer{ position:relative; z-index:1; }
   ::selection{ background:var(--accent-soft); color:var(--ink); }
   h1,h2,h3,h4{ font-family:"Newsreader", Georgia, serif; font-weight:600; margin:0; color:var(--ink); }
@@ -408,9 +413,10 @@
     <span class="blob blob-b"></span>
     <span class="blob blob-c"></span>
   </div>
+  <div id="particles-js" aria-hidden="true"></div>
 
   <header class="nav">
-    <div class="nav-mark">Janidu Lankage</div>
+    <div class="nav-mark">Janidu<span></span>Lankage</div>
     <div class="nav-right">
       <div class="nav-links" id="navLinks">
         <a href="#about">About</a>
@@ -800,6 +806,7 @@
     <p>Janidu Lankage — Colombo, Sri Lanka</p>
   </footer>
 
+<script src="https://cdn.jsdelivr.net/particles.js@2.0.0/particles.min.js"></script>
 <script>
   // ---------- Theme toggle ----------
   const root = document.documentElement;
@@ -812,7 +819,52 @@
     const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
     root.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);
+    initParticles();
   });
+
+  // ---------- Particle background ----------
+  const reduceMotionMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const coarsePointerMQ = window.matchMedia('(pointer: coarse)');
+
+  function initParticles(){
+    const container = document.getElementById('particles-js');
+    if (!container || typeof particlesJS === 'undefined') return;
+    container.innerHTML = '';
+
+    if (reduceMotionMQ.matches) return; // keep it still for reduced-motion users
+
+    const accent = getComputedStyle(root).getPropertyValue('--accent').trim() || '#B9791A';
+    const isSmall = window.innerWidth < 640;
+    const isTouch = coarsePointerMQ.matches;
+
+    particlesJS('particles-js', {
+      particles: {
+        number: { value: isSmall ? 34 : 62, density: { enable: true, value_area: 900 } },
+        color: { value: accent },
+        shape: { type: 'circle' },
+        opacity: { value: 0.4, random: true, anim: { enable: true, speed: 0.6, opacity_min: 0.08, sync: false } },
+        size: { value: 3, random: true, anim: { enable: true, speed: 1.5, size_min: 0.3, sync: false } },
+        line_linked: { enable: true, distance: 140, color: accent, opacity: 0.16, width: 1 },
+        move: { enable: true, speed: 1, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false }
+      },
+      interactivity: {
+        detect_on: 'window',
+        events: {
+          onhover: { enable: !isTouch, mode: 'grab' },
+          onclick: { enable: !isTouch, mode: 'push' },
+          resize: true
+        },
+        modes: {
+          grab: { distance: 150, line_linked: { opacity: 0.45 } },
+          push: { particles_nb: 3 }
+        }
+      },
+      retina_detect: true
+    });
+  }
+
+  initParticles();
+  window.addEventListener('resize', () => { clearTimeout(window.__pjsResize); window.__pjsResize = setTimeout(initParticles, 300); });
 
   // ---------- 3D tilt on hero photo ----------
   const tiltCard = document.getElementById('tiltCard');
