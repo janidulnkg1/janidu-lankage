@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#070912">
+  <meta name="description" content="Janidu Lankage — Software Engineer, Data Science & AI student, and Computer Science educator.">
+  <title>Janidu Lankage — Engineer × Educator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#070912;
+      --bg-2:#0b0e19;
+      --panel:rgba(16,20,34,.58);
+      --panel-strong:rgba(15,19,31,.82);
+      --text:#f5f6fb;
+      --muted:#9aa2ba;
+      --line:rgba(255,255,255,.105);
+      --violet:#9b7cff;
+      --cyan:#4de8ff;
+      --pink:#ff75c8;
+      --lime:#c8ff69;
+      --shadow:0 30px 100px rgba(0,0,0,.34);
+      --radius:28px;
+      --max:1240px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth;background:var(--bg)}
+    body{margin:0;overflow-x:hidden;background:
+      radial-gradient(circle at 20% 5%, rgba(155,124,255,.12), transparent 28%),
+      radial-gradient(circle at 88% 22%, rgba(77,232,255,.09), transparent 24%),
+      linear-gradient(180deg,var(--bg),var(--bg-2) 70%,#070912);color:var(--text);font-family:Manrope,system-ui,sans-serif;line-height:1.6}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.16;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,black,transparent 82%);z-index:-2}
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+    img{max-width:100%;display:block}
+    .mono{font-family:"DM Mono",monospace}
+
+    #webgl{position:fixed;inset:0;z-index:-1;pointer-events:none}
+    .noise{position:fixed;inset:-50%;z-index:50;opacity:.03;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");transform:rotate(5deg)}
+    .cursor,.cursor-dot{position:fixed;left:0;top:0;pointer-events:none;z-index:80;border-radius:50%;mix-blend-mode:difference}
+    .cursor{width:34px;height:34px;border:1px solid rgba(255,255,255,.65);transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s;display:none}
+    .cursor-dot{width:5px;height:5px;background:#fff;transform:translate(-50%,-50%);display:none}
+    @media(pointer:fine){.cursor,.cursor-dot{display:block}}
+    body.cursor-big .cursor{width:56px;height:56px;border-color:#fff}
+
+    .progress{position:fixed;top:0;left:0;width:100%;height:2px;background:rgba(255,255,255,.05);z-index:70}.progress span{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--cyan),var(--violet),var(--pink));box-shadow:0 0 18px rgba(155,124,255,.8)}
+    .topbar{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(calc(100% - 36px),var(--max));z-index:60;display:flex;align-items:center;justify-content:space-between;padding:12px 14px 12px 18px;border:1px solid var(--line);background:rgba(7,9,18,.55);backdrop-filter:blur(24px) saturate(140%);border-radius:20px;box-shadow:0 12px 45px rgba(0,0,0,.2)}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.03em}.brand-mark{width:28px;height:28px;border-radius:9px;background:conic-gradient(from 210deg,var(--cyan),var(--violet),var(--pink),var(--cyan));box-shadow:0 0 30px rgba(155,124,255,.24);position:relative}.brand-mark::after{content:"";position:absolute;inset:5px;border-radius:6px;background:#090b14}.brand em{font-style:normal;color:var(--muted);font-weight:500}
+    .nav{display:flex;gap:4px}.nav a{padding:9px 11px;border-radius:12px;color:var(--muted);font-size:12px;font-weight:700;transition:.25s}.nav a:hover,.nav a.active{color:#fff;background:rgba(255,255,255,.055)}
+    .nav-cta{display:inline-flex;align-items:center;gap:8px;padding:9px 13px;border-radius:12px;background:#fff;color:#070912;font-weight:800;font-size:12px}.nav-cta span{display:inline-block;width:6px;height:6px;border-radius:50%;background:#6cff97;box-shadow:0 0 8px #6cff97}
+    @media(max-width:800px){.nav{display:none}.topbar{top:10px}.nav-cta{padding:9px 11px}}
+
+    main{position:relative;z-index:1}.shell{width:min(calc(100% - 40px),var(--max));margin:0 auto}.section{padding:120px 0}.hero{min-height:100svh;display:grid;align-items:center;padding:140px 0 90px}.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:80px;align-items:center}.eyebrow{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);background:rgba(255,255,255,.04);border-radius:999px;padding:8px 12px;color:#b9c0d5;font-size:11px;letter-spacing:.13em;text-transform:uppercase}.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 16px var(--lime)}h1{font-size:clamp(56px,9vw,124px);line-height:.92;letter-spacing:-.075em;margin:22px 0 24px;max-width:8.4ch}h1 .ghost{color:#6e758b}h1 .grad{background:linear-gradient(110deg,#fff 5%,#bbadff 42%,#71e9ff 78%,#fff);background-size:180% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 7s linear infinite}.hero-copy{max-width:650px}.hero-copy p{font-size:18px;color:#aeb6ce;max-width:60ch;margin:0}.hero-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}.btn{position:relative;display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);padding:13px 17px;border-radius:14px;font-weight:800;font-size:13px;overflow:hidden;transition:transform .25s,box-shadow .25s,border-color .25s}.btn::before{content:"";position:absolute;inset:0;transform:translateX(-110%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);transition:transform .55s}.btn:hover::before{transform:translateX(110%)}.btn:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.22);box-shadow:0 18px 40px rgba(0,0,0,.2)}.btn.primary{background:linear-gradient(135deg,#fff,#dbe0ff);color:#080a13;border-color:#fff}.btn .arrow{font-size:16px}.scroll-cue{margin-top:74px;display:flex;align-items:center;gap:12px;color:#69718a;font-size:10px;letter-spacing:.18em;text-transform:uppercase}.scroll-cue span{display:block;width:46px;height:1px;background:linear-gradient(90deg,#6d748b,transparent)}
+
+    .hero-orbit{position:relative;min-height:580px}.orb-wrap{position:absolute;inset:0;display:grid;place-items:center;perspective:1000px}.orb{width:min(33vw,430px);aspect-ratio:1;border-radius:50%;position:relative;transform-style:preserve-3d;filter:drop-shadow(0 40px 70px rgba(40,50,120,.24))}.orb::before{content:"";position:absolute;inset:8%;border-radius:50%;background:radial-gradient(circle at 36% 30%,rgba(255,255,255,.9),rgba(255,255,255,.1) 9%,transparent 10%),radial-gradient(circle at 42% 40%,#d7d4ff 0%,#8f7aff 24%,#362b83 56%,#12132e 78%,#060711 100%);box-shadow:inset -30px -30px 80px rgba(0,0,0,.55),inset 20px 20px 60px rgba(255,255,255,.16),0 0 100px rgba(155,124,255,.16)}.ring{position:absolute;border:1px solid rgba(255,255,255,.16);border-radius:50%;transform:rotateX(72deg) rotateY(-12deg);animation:spin 13s linear infinite}.ring.r1{inset:3%;}.ring.r2{inset:-8%;transform:rotateX(76deg) rotateZ(28deg);animation-duration:17s}.ring.r3{inset:16%;transform:rotateY(75deg) rotateZ(-24deg);animation-duration:9s;opacity:.55}.satellite{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--cyan);box-shadow:0 0 24px var(--cyan);top:19%;right:13%;animation:float 4s ease-in-out infinite}.satellite.two{width:8px;height:8px;background:var(--pink);box-shadow:0 0 22px var(--pink);bottom:15%;left:16%;animation-delay:-1.5s}.orb-caption{position:absolute;left:8%;bottom:4%;display:grid;gap:5px}.orb-caption strong{font-size:13px}.orb-caption span{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:#707991}.orbit-line{position:absolute;inset:14% -5%;border-top:1px dashed rgba(255,255,255,.08);transform:rotate(-18deg);filter:blur(.2px)}
+
+    .statement{display:grid;grid-template-columns:.72fr 1.28fr;gap:72px;align-items:start}.kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#727c95}.display{font-size:clamp(30px,4.4vw,58px);line-height:1.02;letter-spacing:-.055em;margin:0}.display .soft{color:#646d84}.intro-copy{font-size:17px;color:#9fa7bf;max-width:63ch}.meta-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}.meta{padding:14px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025)}.meta b{display:block;font-size:15px}.meta span{color:#6f7890;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
+
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:30px;margin-bottom:28px}.section-head h2{font-size:clamp(34px,5vw,62px);letter-spacing:-.06em;line-height:.95;margin:0}.section-head p{max-width:480px;color:#8089a1;margin:0;font-size:14px}.number{font-size:11px;color:#6d758c;letter-spacing:.15em}
+
+    .capabilities{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.cap{min-height:340px;padding:26px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.018));position:relative;overflow:hidden;transform-style:preserve-3d;transition:border-color .35s,background .35s,transform .35s}.cap:hover{border-color:rgba(155,124,255,.36);background:linear-gradient(180deg,rgba(155,124,255,.1),rgba(255,255,255,.02))}.cap::after{content:"";position:absolute;width:180px;height:180px;right:-70px;bottom:-80px;border-radius:50%;background:var(--glow);filter:blur(35px);opacity:.18}.cap .index{font-size:11px;color:#636b82}.cap h3{font-size:24px;letter-spacing:-.04em;margin:54px 0 10px}.cap p{color:#8992aa;font-size:14px;margin:0}.cap ul{display:flex;flex-wrap:wrap;gap:7px;margin-top:22px}.cap li{font-family:"DM Mono",monospace;font-size:10px;padding:7px 9px;border:1px solid rgba(255,255,255,.09);border-radius:999px;color:#b1b8ca;background:rgba(255,255,255,.03)}
+
+    .service-hero{padding:34px;border:1px solid var(--line);border-radius:28px;background:linear-gradient(135deg,rgba(155,124,255,.12),rgba(77,232,255,.05) 50%,rgba(255,117,200,.06));position:relative;overflow:hidden;margin-bottom:14px}.service-hero::before{content:"";position:absolute;inset:auto -10% -70%;height:260px;background:radial-gradient(circle,rgba(155,124,255,.18),transparent 65%)}.service-hero-inner{display:flex;justify-content:space-between;gap:40px;align-items:center;position:relative}.service-hero h3{font-size:clamp(28px,4vw,44px);letter-spacing:-.05em;margin:0}.service-hero p{max-width:580px;color:#8992a8;margin:8px 0 0;font-size:14px}.service-hero .badge{padding:10px 12px;border:1px solid rgba(255,255,255,.09);border-radius:14px;color:#c9d0e0;font-size:11px;white-space:nowrap}.boards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.board{padding:22px;border:1px solid var(--line);border-radius:22px;background:rgba(255,255,255,.025);min-height:270px;transform-style:preserve-3d;transition:.3s}.board:hover{background:rgba(255,255,255,.045);transform:translateY(-7px);border-color:rgba(77,232,255,.24)}.board-top{display:flex;justify-content:space-between;align-items:center;gap:12px}.board h4{margin:0;font-size:19px}.board .dot{width:9px;height:9px;border-radius:50%;background:var(--dot);box-shadow:0 0 18px var(--dot)}.board ul{margin:26px 0 0;padding:0;list-style:none}.board li{padding:10px 0;border-top:1px solid rgba(255,255,255,.07);font-size:12px;color:#818ba4}.board li::before{content:"↳";margin-right:8px;color:#9aa2ba}.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}.tag{font-family:"DM Mono",monospace;font-size:10px;color:#8993ab;border:1px solid rgba(255,255,255,.09);padding:8px 10px;border-radius:999px}
+
+    .timeline{position:relative}.timeline::before{content:"";position:absolute;left:18px;top:18px;bottom:18px;width:1px;background:linear-gradient(180deg,rgba(155,124,255,.7),rgba(255,255,255,.04))}.trow{position:relative;display:grid;grid-template-columns:170px 1fr;gap:36px;padding:0 0 22px}.trow:last-child{padding-bottom:0}.tdot{position:absolute;left:14px;top:17px;width:9px;height:9px;border-radius:50%;background:#fff;box-shadow:0 0 0 5px var(--bg),0 0 18px rgba(155,124,255,.8)}.tdate{padding-left:60px;padding-top:9px;font-family:"DM Mono",monospace;font-size:10px;color:#697189;letter-spacing:.06em}.tcard{border:1px solid var(--line);border-radius:22px;padding:23px;background:rgba(255,255,255,.025);transition:.3s}.tcard:hover{border-color:rgba(255,255,255,.17);transform:translateX(6px);background:rgba(255,255,255,.04)}.tcard h3{margin:0;font-size:22px;letter-spacing:-.04em}.org{display:block;color:#a28bff;font-size:12px;margin-top:5px}.tcard ul{margin:18px 0 0;padding:0;display:grid;gap:7px}.tcard li{color:#7f89a2;font-size:12px;padding-left:17px;position:relative}.tcard li::before{content:"";position:absolute;left:0;top:.6em;width:5px;height:5px;border-radius:50%;background:#596178}.more{margin-top:12px;color:#788198;font-size:10px}.more summary{cursor:pointer;list-style:none;font-family:"DM Mono",monospace;color:#9b7cff}.more summary::-webkit-details-marker{display:none}
+
+    .education{display:grid;grid-template-columns:.85fr 1.15fr;gap:30px}.edu-side{padding:28px;border:1px solid var(--line);border-radius:24px;background:linear-gradient(160deg,rgba(155,124,255,.10),rgba(255,255,255,.02));min-height:100%}.edu-side h3{font-size:30px;letter-spacing:-.05em;margin:0 0 10px}.edu-side p{font-size:13px;color:#848ea7}.edu-pill{display:inline-flex;padding:9px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.1);font-family:"DM Mono",monospace;font-size:10px;color:#b7bdd0;margin-top:20px}.edu-list{display:grid;gap:10px}.edu-item{padding:20px;border:1px solid var(--line);border-radius:19px;background:rgba(255,255,255,.02)}.edu-item small{font-family:"DM Mono",monospace;color:#697189;font-size:9px;text-transform:uppercase;letter-spacing:.1em}.edu-item h4{margin:7px 0 2px;font-size:18px;letter-spacing:-.03em}.edu-item p{margin:0;color:#778199;font-size:11px}
+
+    .contact{padding-bottom:80px}.contact-card{position:relative;overflow:hidden;padding:42px;border:1px solid rgba(155,124,255,.22);border-radius:30px;background:radial-gradient(circle at 75% 20%,rgba(77,232,255,.09),transparent 30%),linear-gradient(135deg,rgba(155,124,255,.11),rgba(255,255,255,.03));display:grid;grid-template-columns:1fr auto;gap:40px;align-items:center}.contact-card::before{content:"";position:absolute;width:380px;height:380px;right:-160px;top:-230px;border-radius:50%;border:1px solid rgba(255,255,255,.08);box-shadow:0 0 0 1px rgba(255,255,255,.03),0 0 90px rgba(155,124,255,.12)}.contact-card h2{font-size:clamp(40px,6vw,78px);line-height:.95;letter-spacing:-.06em;margin:0}.contact-card p{color:#8993aa;max-width:580px;font-size:14px}.contact-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}.contact-link{padding:12px 14px;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.025);font-family:"DM Mono",monospace;font-size:10px;color:#c1c7d7;transition:.25s}.contact-link:hover{border-color:rgba(255,255,255,.2);transform:translateY(-2px)}.footer{display:flex;justify-content:space-between;gap:20px;padding:0 0 36px;color:#5f677d;font-family:"DM Mono",monospace;font-size:9px;text-transform:uppercase;letter-spacing:.14em}.backtop{cursor:pointer;color:#8f97ad}
+
+    .reveal{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s cubic-bezier(.22,.8,.3,1)}.reveal.in{opacity:1;transform:none}.stagger>*{opacity:0;transform:translateY(25px);transition:opacity .75s ease,transform .75s cubic-bezier(.22,.8,.3,1)}.stagger.in>*{opacity:1;transform:none}.stagger.in>*:nth-child(2){transition-delay:.08s}.stagger.in>*:nth-child(3){transition-delay:.16s}.stagger.in>*:nth-child(4){transition-delay:.24s}.stagger.in>*:nth-child(5){transition-delay:.32s}.stagger.in>*:nth-child(6){transition-delay:.4s}
+    .mobile-hint{display:none}
+
+    @keyframes spin{to{transform:rotateX(72deg) rotateY(-12deg) rotateZ(360deg)}}@keyframes float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(8px,-15px,20px)}}@keyframes shine{to{background-position:180% center}}
+    @media(max-width:980px){.hero-grid,.statement,.education{grid-template-columns:1fr}.hero-orbit{min-height:500px;order:-1}.orb{width:min(72vw,390px)}.capabilities,.boards{grid-template-columns:1fr}.trow{grid-template-columns:1fr}.tdate{padding:0 0 0 60px}.contact-card{grid-template-columns:1fr}.meta-grid{grid-template-columns:1fr}}
+    @media(max-width:600px){.shell{width:min(calc(100% - 28px),var(--max))}.section{padding:88px 0}.hero{padding-top:120px}.hero-copy p{font-size:15px}.hero-actions .btn{flex:1;justify-content:center}.hero-orbit{min-height:390px}h1{font-size:clamp(52px,16vw,76px)}.orb-caption{left:4%;bottom:5%}.cap{min-height:auto}.service-hero-inner{align-items:flex-start;flex-direction:column}.contact-card{padding:30px 24px}.footer{flex-direction:column}.mobile-hint{display:block;color:#697189;font-size:10px;margin-top:6px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.orb,.ring,.satellite{animation:none}.reveal,.stagger>*{transition:none}.reveal,.stagger>*{opacity:1;transform:none}}
+  </style>
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <div class="progress"><span id="progress"></span></div>
+  <canvas id="webgl" aria-hidden="true"></canvas>
+  <div class="cursor" id="cursor"></div><div class="cursor-dot" id="cursorDot"></div>
+
+  <header class="topbar">
+    <a class="brand magnetic" href="#top" aria-label="Janidu Lankage home"><span class="brand-mark"></span><span>Janidu <em>Lankage</em></span></a>
+    <nav class="nav" id="nav">
+      <a href="#about">About</a><a href="#services">Services</a><a href="#experience">Experience</a><a href="#cpd">CPD</a><a href="#education">Education</a><a href="#contact">Contact</a>
+    </nav>
+    <a class="nav-cta magnetic" href="mailto:janidulnkg1@gmail.com"><span></span> Available to connect</a>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="shell hero-grid">
+        <div class="hero-copy reveal">
+          <span class="eyebrow mono"><i></i> engineer × educator</span>
+          <h1><span class="ghost">Build.</span><br><span class="grad">Teach.</span><br>Multiply.</h1>
+          <p>I build .NET Core systems by day and teach, design, and lead Computer Science education alongside it — two disciplines connected by the same thing: logic.</p>
+          <div class="hero-actions">
+            <a class="btn primary magnetic" href="CV_MLJCLankage.pdf" download>Download CV <span class="arrow">↘</span></a>
+            <a class="btn magnetic" href="mailto:janidulnkg1@gmail.com">Start a conversation <span class="arrow">↗</span></a>
+          </div>
+          <div class="scroll-cue mono"><span></span> scroll to explore</div>
+        </div>
+
+        <div class="hero-orbit reveal" data-tilt-strength="9">
+          <div class="orbit-line"></div>
+          <div class="orb-wrap">
+            <div class="orb" id="orb">
+              <div class="ring r1"></div><div class="ring r2"></div><div class="ring r3"></div>
+              <span class="satellite"></span><span class="satellite two"></span>
+              <div class="orb-caption"><strong>JANIDU LANKAGE</strong><span class="mono">Software engineering / education / AI</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="about">
+      <div class="shell">
+        <div class="statement reveal">
+          <div><span class="kicker mono">01 / profile</span><h2 class="display" style="margin-top:16px">Three modes.<br>One <span class="soft">operating system.</span></h2></div>
+          <div>
+            <p class="intro-copy">I'm a software engineer specialising in scalable .NET Core Web APIs and MVC applications, while actively developing deeper expertise in artificial intelligence and data science through an MSc at the University of Sri Jayewardenepura.</p>
+            <p class="intro-copy">Parallel to engineering, I work in education — teaching British-curriculum STEM subjects, leading Cambridge and Edexcel IAL Computer Science, creating examiner-style resources, and mentoring learners toward academic excellence.</p>
+            <div class="meta-grid">
+              <div class="meta"><b>.NET Core</b><span class="mono">Engineering</span></div>
+              <div class="meta"><b>Data Science &amp; AI</b><span class="mono">MSc / in progress</span></div>
+              <div class="meta"><b>Cambridge × Edexcel</b><span class="mono">Curriculum leadership</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section" style="padding-bottom:0">
+          <div class="capabilities stagger reveal">
+            <article class="cap" style="--glow:var(--violet)"><span class="index mono">A / 01</span><h3>Engineer</h3><p>Robust application architecture, scalable APIs, and modern .NET development.</p><ul><li>.NET Core</li><li>Web APIs</li><li>MVC</li><li>C#</li></ul></article>
+            <article class="cap" style="--glow:var(--cyan)"><span class="index mono">A / 02</span><h3>Data explorer</h3><p>Growing an engineering mindset around AI, analytics, and data engineering.</p><ul><li>AI</li><li>Data science</li><li>Analytics</li><li>Python</li></ul></article>
+            <article class="cap" style="--glow:var(--pink)"><span class="index mono">A / 03</span><h3>Educator</h3><p>Teaching, subject leadership, resource design, revision support, and mentoring.</p><ul><li>Cambridge</li><li>Edexcel</li><li>STEM</li><li>Curriculum</li></ul></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="services">
+      <div class="shell">
+        <div class="section-head reveal"><div><span class="number mono">02 / what I teach</span><h2>Education,<br>engineered.</h2></div><p>Tutoring across Pearson Edexcel, Cambridge, and Oxford AQA pathways, from IGCSE/O-Level through International A-Level, with additional higher-education lecturing.</p></div>
+        <div class="service-hero reveal"><div class="service-hero-inner"><div><h3>Exam boards × technical depth</h3><p>From subject knowledge and exam technique to C#, Python, SQL, data structures, algorithms, UML, and ERD.</p></div><span class="badge mono">5 specialist areas</span></div></div>
+        <div class="boards stagger reveal">
+          <article class="board" style="--dot:var(--lime)"><div class="board-top"><h4>Pearson Edexcel</h4><span class="dot"></span></div><ul><li>IAL: Information Technology, Computer Science, Physics</li><li>IGCSE (O/L): ICT, Computer Science, Physics, Biology, Chemistry, Single Award Science</li><li>GCSE (O/L): ICT, Computer Science, Physics, Biology, Chemistry</li></ul></article>
+          <article class="board" style="--dot:var(--cyan)"><div class="board-top"><h4>Cambridge</h4><span class="dot"></span></div><ul><li>IAL / GCE A-Level: Computer Science, Information Technology</li><li>IGCSE / GCE O-Level: ICT, Computer Science</li></ul></article>
+          <article class="board" style="--dot:var(--pink)"><div class="board-top"><h4>Oxford AQA</h4><span class="dot"></span></div><ul><li>GCSE / IGCSE: ICT, Computer Science, Physics, Biology, Chemistry</li></ul></article>
+        </div>
+        <div class="tag-row reveal"><span class="tag">Pearson BTEC HND Computing</span><span class="tag">C# &amp; Python programming</span><span class="tag">SQL &amp; MySQL databases</span><span class="tag">Data structures &amp; algorithms</span><span class="tag">UML &amp; ERD</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="experience">
+      <div class="shell">
+        <div class="section-head reveal"><div><span class="number mono">03 / selected experience</span><h2>Where the work<br>happens.</h2></div><p>A current snapshot of teaching, subject leadership, lecturing, school leadership, and examination work from the supplied portfolio content.</p></div>
+        <div class="timeline stagger reveal">
+          <article class="trow"><span class="tdot"></span><div class="tdate">2026 — PRESENT</div><div class="tcard"><h3>Visiting Lecturer</h3><span class="org">ESOFT Metro Campus</span><ul><li>Pearson BTEC HND Computing</li><li>Diploma in ICT (DIIT)</li></ul></div></article>
+          <article class="trow"><span class="tdot"></span><div class="tdate">JUN 2026 — PRESENT</div><div class="tcard"><h3>Teacher in Charge, Prefect's Guild</h3><span class="org">Royal Institute International School, Nugegoda</span><details class="more"><summary>view responsibilities</summary><ul><li>Act as the communication bridge between the prefect guild and school management</li><li>Monitor prefect attendance at duties, assemblies, and events, reporting absences</li><li>Relay directives and gather feedback between management and prefects</li><li>Coordinate meetings and relay real-time instructions during school events</li><li>Enforce school standards on punctuality, dress code, and discipline</li><li>Report on prefect performance and any negligence or breaches</li></ul></details></div></article>
+          <article class="trow"><span class="tdot"></span><div class="tdate">MAY 2026 — PRESENT</div><div class="tcard"><h3>Head of Subject — Edexcel IAL Computer Science</h3><span class="org">Royal Institute International School</span><ul><li>Spearhead the design and oversight of lesson plans and schemes of work</li><li>Appoint paper setters and moderators</li><li>Maintain academic integrity in Computer Science and Python programming</li></ul></div></article>
+          <article class="trow"><span class="tdot"></span><div class="tdate">JUL 2025 — PRESENT</div><div class="tcard"><h3>Head of Subject — Cambridge IAL Computer Science</h3><span class="org">Royal Institute International School</span><ul><li>Lead design and moderation of lesson plans and schemes of work</li><li>Appoint paper setters and moderators</li><li>Align teaching with international standards and modern methodology</li></ul></div></article>
+          <article class="trow"><span class="tdot"></span><div class="tdate">JUN 2025 — PRESENT</div><div class="tcard"><h3>A/L IT &amp; Computer Science Teacher</h3><span class="org">Royal Institute International School</span><ul><li>Deliver Edexcel IAL AS/A2 Information Technology</li><li>Deliver Cambridge AS/A2 Computer Science (9618)</li><li>Member of the Disciplinary Committee</li></ul></div></article>
+          <article class="trow"><span class="tdot"></span><div class="tdate">MAY–JUN 2025 &amp; 2026</div><div class="tcard"><h3>Exam Invigilator</h3><span class="org">Royal Institute International School</span><p class="intro-copy" style="font-size:12px;margin:14px 0 0">Ensured the smooth, fair, and secure conduct of Edexcel and Cambridge examinations at the Royal Institute Campus.</p><details class="more"><summary>view responsibilities</summary><p class="mobile-hint">The supplied source ends part-way through this responsibility list, so only the complete description above is reproduced here.</p></details></div></article>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="section" id="cpd">
+      <div class="shell">
+        <div class="cpd-intro reveal">
+          <div><span class="number mono">04 / continuous professional development</span><h2 class="cpd-title" style="margin-top:16px">CPD, training<br>and credentials.</h2></div>
+          <p class="cpd-copy">A dedicated professional-development layer for the teaching and assessment ecosystem around my work. This is where Pearson Edexcel training certificates, Cambridge development, educator training, and other continuing professional learning can live alongside the formal academic qualifications shown below.</p>
+        </div>
+
+        <div class="cpd-grid stagger reveal">
+          <article class="cpd-card" data-tilt-strength="7">
+            <span class="cpd-index mono">CPD / 01</span>
+            <h3>Pearson Edexcel training certificates</h3>
+            <p>Professional learning and training completed through the Pearson Edexcel ecosystem, presented as a certificate-first visual archive.</p>
+            <span class="cpd-status mono">certificate gallery</span>
+          </article>
+          <article class="cpd-card" data-tilt-strength="7">
+            <span class="cpd-index mono">CPD / 02</span>
+            <h3>Cambridge professional development</h3>
+            <p>Space for Cambridge assessment, curriculum, teaching, and examiner-focused development records relevant to Computer Science.</p>
+            <span class="cpd-status mono">professional learning</span>
+          </article>
+          <article class="cpd-card" data-tilt-strength="7">
+            <span class="cpd-index mono">CPD / 03</span>
+            <h3>Education leadership &amp; practice</h3>
+            <p>Professional growth aligned with education management, leadership, curriculum design, moderation, and learner support.</p>
+            <span class="cpd-status mono">education practice</span>
+          </article>
+        </div>
+
+        <div class="cpd-rail reveal">
+          <div class="cpd-note">
+            <strong>What belongs here</strong>
+            <p>The section is intentionally broader than a simple “certifications” list: it can hold certificates, training records, professional workshops, assessment development, and teaching-focused continuous learning.</p>
+            <div class="mini-tags"><span>Pearson Edexcel</span><span>Cambridge</span><span>Teaching</span><span>Assessment</span><span>Leadership</span><span>CPD</span></div>
+          </div>
+          <div class="cpd-note">
+            <strong>Certificate-ready layout</strong>
+            <p>Drop the certificate scans into <span class="mono">assets/cpd/</span> and this section can be expanded into a visual certificate carousel without changing the rest of the page.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="education">
+      <div class="shell">
+        <div class="section-head reveal"><div><span class="number mono">05 / education</span><h2>Learn → build<br>→ teach.</h2></div><p>The education history provided in the original portfolio, presented as a compact vertical stack.</p></div>
+        <div class="education reveal">
+          <aside class="edu-side"><span class="number mono">CURRENT FOCUS</span><h3>MSc Data Science &amp; AI</h3><p>University of Sri Jayewardenepura.</p><span class="edu-pill mono">in progress</span></aside>
+          <div class="edu-list stagger reveal">
+            <article class="edu-item"><small>POSTGRADUATE</small><h4>PgD in Education Management &amp; Leadership</h4><p>OTHM Level 7</p></article>
+            <article class="edu-item"><small>2022 — 2023</small><h4>BSc (Hons) Software Engineering</h4><p>Cardiff Metropolitan University</p></article>
+            <article class="edu-item"><small>2021 — 2022</small><h4>Higher Diploma in Computing and Software Engineering</h4><p>Cardiff Metropolitan University</p></article>
+            <article class="edu-item"><small>2004 — 2018</small><h4>Gateway College, Kandy</h4><p>Edexcel International A/L (2017/18) &amp; IGCSE O/L (2015/16)</p></article>
+            <article class="edu-item"><small>SCHOOL LEADERSHIP</small><h4>Deputy Head Prefect, 2017–2018</h4><p>Prefect, 2016–2018</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section contact" id="contact">
+      <div class="shell">
+        <div class="contact-card reveal"><div><span class="number mono">06 / contact</span><h2>Let's make<br>something useful.</h2><p>For software engineering, teaching, curriculum, lecturing, or an interesting technical conversation.</p><div class="contact-links"><a class="contact-link magnetic" href="mailto:janidulnkg1@gmail.com">janidulnkg1@gmail.com</a><a class="contact-link magnetic" href="tel:+94703413223">+94 70 341 3223</a><a class="contact-link magnetic" href="CV_MLJCLankage.pdf" download>CV ↘</a></div></div><div class="mono" style="color:#69728a;font-size:10px;letter-spacing:.16em;text-transform:uppercase">open to conversation<br>and collaboration</div></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="shell footer"><span>Janidu Lankage / portfolio 2026</span><span class="backtop" id="backtop">back to top ↑</span></footer>
+
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js';
+
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const canvas = document.getElementById('webgl');
+    const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true, powerPreference:'high-performance'});
+    renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+    renderer.setSize(innerWidth,innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(34,innerWidth/innerHeight,.1,100);
+    camera.position.z = 10;
+
+    const group = new THREE.Group(); scene.add(group);
+    const count = innerWidth < 700 ? 850 : 1450;
+    const positions = new Float32Array(count*3);
+    const colors = new Float32Array(count*3);
+    const c1 = new THREE.Color('#9b7cff'), c2 = new THREE.Color('#4de8ff'), c3 = new THREE.Color('#ff75c8');
+    for(let i=0;i<count;i++){
+      const r = 12*Math.pow(Math.random(),.78), a=Math.random()*Math.PI*2, z=(Math.random()-.5)*10;
+      positions[i*3]=Math.cos(a)*r; positions[i*3+1]=Math.sin(a)*r; positions[i*3+2]=z;
+      const c = i%3===0?c1:(i%3===1?c2:c3); colors.set([c.r,c.g,c.b],i*3);
+    }
+    const geo = new THREE.BufferGeometry(); geo.setAttribute('position',new THREE.BufferAttribute(positions,3)); geo.setAttribute('color',new THREE.BufferAttribute(colors,3));
+    const mat = new THREE.PointsMaterial({size:.024,vertexColors:true,transparent:true,opacity:.28,depthWrite:false,blending:THREE.AdditiveBlending});
+    const points = new THREE.Points(geo,mat); group.add(points);
+
+    const coreGeo = new THREE.IcosahedronGeometry(1.7,3);
+    const coreMat = new THREE.MeshBasicMaterial({color:0x7f70ff,wireframe:true,transparent:true,opacity:.055});
+    const core = new THREE.Mesh(coreGeo,coreMat); core.position.set(2.6,.6,-1); group.add(core);
+
+    let px=0,py=0,tx=0,ty=0;
+    addEventListener('pointermove',e=>{tx=(e.clientX/innerWidth-.5)*2;ty=(e.clientY/innerHeight-.5)*2});
+    addEventListener('resize',()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()});
+    const clock = new THREE.Clock();
+    function loop(){
+      const t=clock.getElapsedTime();
+      if(!reduceMotion){px+=(tx-px)*.025;py+=(ty-py)*.025;group.rotation.y=px*.045;group.rotation.x=-py*.025;points.rotation.z=t*.007;core.rotation.x=t*.12;core.rotation.y=t*.18}
+      renderer.render(scene,camera); requestAnimationFrame(loop);
+    } loop();
+
+    const cursor=document.getElementById('cursor'), dot=document.getElementById('cursorDot'); let cx=innerWidth/2,cy=innerHeight/2,dx=cx,dy=cy;
+    addEventListener('pointermove',e=>{cx=e.clientX;cy=e.clientY});
+    (function cursorLoop(){dx+=(cx-dx)*.2;dy+=(cy-dy)*.2;cursor.style.left=dx+'px';cursor.style.top=dy+'px';dot.style.left=cx+'px';dot.style.top=cy+'px';requestAnimationFrame(cursorLoop)})();
+    document.querySelectorAll('a,.btn,.cap,.board,.contact-link').forEach(el=>{el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-big'));el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-big'))});
+
+    const progress=document.getElementById('progress');
+    addEventListener('scroll',()=>{const h=document.documentElement.scrollHeight-innerHeight;progress.style.width=(scrollY/h*100)+'%'});
+
+    const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in'); observer.unobserve(entry.target)}}),{threshold:.14});
+    document.querySelectorAll('.reveal,.stagger').forEach(el=>observer.observe(el));
+
+    document.querySelectorAll('[data-tilt-strength],.cap,.board').forEach(card=>{
+      if(reduceMotion) return;
+      card.addEventListener('pointermove',e=>{const r=card.getBoundingClientRect(),rx=((e.clientY-r.top)/r.height-.5)*-7,ry=((e.clientX-r.left)/r.width-.5)*8;card.style.transform=`perspective(900px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`});
+      card.addEventListener('pointerleave',()=>card.style.transform='');
+    });
+
+    const sections=[...document.querySelectorAll('main section[id]')]; const navLinks=[...document.querySelectorAll('.nav a')];
+    const navObs=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+entry.target.id))}}),{rootMargin:'-42% 0px -42% 0px',threshold:0}); sections.forEach(s=>navObs.observe(s));
+    document.getElementById('backtop').addEventListener('click',()=>scrollTo({top:0,behavior:'smooth'}));
+
+    // Magnetic micro-interaction for desktop pointers.
+    if(matchMedia('(pointer:fine)').matches && !reduceMotion){document.querySelectorAll('.magnetic').forEach(el=>{el.addEventListener('pointermove',e=>{const r=el.getBoundingClientRect();el.style.transform=`translate(${(e.clientX-(r.left+r.width/2))*.12}px,${(e.clientY-(r.top+r.height/2))*.18}px)`});el.addEventListener('pointerleave',()=>el.style.transform='')})}
+  </script>
+</body>
+</html>

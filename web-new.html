@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Janidu Lankage — Software Engineer & Educator</title>
+<meta name="description" content="Portfolio of Janidu Lankage — .NET Core software engineer and Cambridge/Edexcel Computer Science educator.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505;
+    --surface: rgba(20, 20, 20, 0.6);
+    --surface-border: rgba(255, 255, 255, 0.08);
+    --text-main: #f0f0f0;
+    --text-muted: #9ba1a6;
+    --accent-1: #00f0ff;
+    --accent-2: #ff003c;
+    --accent-3: #7000ff;
+    --glass-blur: blur(16px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    background-color: var(--bg);
+    color: var(--text-main);
+    font-family: 'Outfit', sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* 3D Animated Background */
+  .bg-orbs {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    background: radial-gradient(circle at center, #111 0%, #000 100%);
+  }
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    animation: float 20s infinite alternate ease-in-out;
+  }
+  .orb-1 { width: 400px; height: 400px; background: var(--accent-3); top: -10%; left: -10%; }
+  .orb-2 { width: 300px; height: 300px; background: var(--accent-1); bottom: 10%; right: -5%; animation-delay: -5s; }
+  .orb-3 { width: 250px; height: 250px; background: var(--accent-2); top: 40%; left: 40%; animation-delay: -10s; }
+
+  @keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(100px, 150px) scale(1.2); }
+  }
+
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+  .mono { font-family: 'Space Grotesk', monospace; }
+
+  /* Navigation */
+  nav {
+    position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+    z-index: 100;
+    background: var(--surface);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--surface-border);
+    border-radius: 100px;
+    padding: 12px 32px;
+    display: flex; gap: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  nav a {
+    color: var(--text-main); text-decoration: none;
+    font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+    transition: color 0.3s;
+  }
+  nav a:hover { color: var(--accent-1); }
+
+  /* Hero Section */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding-top: 80px; perspective: 1000px;
+  }
+  .hero-content { text-align: center; transform-style: preserve-3d; }
+  .hero-title {
+    font-size: clamp(40px, 8vw, 90px); font-weight: 800; line-height: 1;
+    background: linear-gradient(to right, var(--text-main), var(--text-muted));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    margin-bottom: 20px;
+    transform: translateZ(50px);
+  }
+  .hero-subtitle {
+    font-size: 20px; color: var(--accent-1); margin-bottom: 30px;
+    font-family: 'Space Grotesk', monospace; transform: translateZ(30px);
+  }
+  .hero-desc { max-width: 600px; margin: 0 auto 40px; color: var(--text-muted); font-size: 18px; transform: translateZ(20px); }
+
+  /* 3D Buttons */
+  .btn-group { display: flex; gap: 20px; justify-content: center; transform: translateZ(40px); }
+  .btn {
+    padding: 14px 28px; border-radius: 8px; text-decoration: none; font-weight: 600;
+    transition: all 0.3s ease; border: 1px solid var(--surface-border);
+    background: rgba(255,255,255,0.05); color: var(--text-main);
+    backdrop-filter: blur(10px); position: relative; overflow: hidden;
+  }
+  .btn::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+  .btn:hover::before { left: 100%; }
+  .btn.primary { background: var(--text-main); color: var(--bg); border: none; }
+
+  /* Section Styling & Scroll Reveal */
+  section { padding: 100px 0; border-top: 1px solid var(--surface-border); }
+  .section-title {
+    font-size: 40px; margin-bottom: 50px; text-align: center; font-weight: 800;
+    background: linear-gradient(45deg, var(--accent-1), var(--accent-3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+  .reveal.active { opacity: 1; transform: translateY(0); }
+
+  /* 3D Tilt Cards */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; perspective: 1000px; }
+  .card-3d {
+    background: var(--surface); border: 1px solid var(--surface-border);
+    border-radius: 20px; padding: 30px;
+    backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+    transform-style: preserve-3d; transition: transform 0.1s ease, box-shadow 0.1s ease;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+  .card-3d h3 { font-size: 24px; margin-bottom: 15px; transform: translateZ(40px); }
+  .card-3d p, .card-3d ul { color: var(--text-muted); transform: translateZ(20px); list-style-position: inside; }
+  .card-3d li { margin-bottom: 8px; }
+
+  /* Tags */
+  .tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; transform: translateZ(30px); }
+  .tag {
+    font-family: 'Space Grotesk', monospace; font-size: 12px;
+    padding: 6px 12px; border-radius: 20px;
+    background: rgba(0, 240, 255, 0.1); color: var(--accent-1);
+    border: 1px solid rgba(0, 240, 255, 0.3);
+  }
+
+  /* Timeline */
+  .timeline { border-left: 2px solid var(--surface-border); padding-left: 30px; position: relative; }
+  .timeline-item { margin-bottom: 40px; position: relative; }
+  .timeline-item::before {
+    content: ''; position: absolute; left: -39px; top: 0; width: 16px; height: 16px;
+    border-radius: 50%; background: var(--accent-3); border: 4px solid var(--bg);
+  }
+  .time-date { font-family: 'Space Grotesk', monospace; color: var(--accent-3); font-size: 14px; margin-bottom: 5px; display: block;}
+  .timeline-item h4 { font-size: 20px; margin-bottom: 5px; }
+  .timeline-item span { color: var(--text-muted); font-style: italic; display: block; margin-bottom: 10px; }
+
+  @media (max-width: 768px) {
+    nav { width: 90%; justify-content: center; flex-wrap: wrap; padding: 12px; gap: 15px; }
+    .hero-title { font-size: 50px; }
+    .btn-group { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Ambient 3D Background -->
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <nav>
+    <a href="#about">About</a>
+    <a href="#services">Services</a>
+    <a href="#development">Development</a>
+    <a href="#experience">Experience</a>
+  </nav>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="hero-content" id="hero3d">
+        <h1 class="hero-title">Janidu Lankage</h1>
+        <div class="hero-subtitle">Software Engineer & Educator</div>
+        <p class="hero-desc">I build .NET Core systems by day and mark, teach, and design Cambridge & Edexcel Computer Science curricula the rest of the time — two disciplines that run on the same logic.</p>
+        <div class="btn-group">
+          <a href="CV_MLJCLankage.pdf" class="btn primary">Download CV</a>
+          <a href="mailto:janidulnkg1@gmail.com" class="btn">Get in Touch</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="reveal">
+      <h2 class="section-title">About Me</h2>
+      <div class="grid">
+        <div class="card-3d js-tilt">
+          <h3>Engineer</h3>
+          <p>Building robust systems with .NET Core, Web APIs, and modern frameworks. Strong expertise in scalable application development.</p>
+        </div>
+        <div class="card-3d js-tilt">
+          <h3>Data Enthusiast</h3>
+          <p>Exploring AI, analytics, and data engineering. Currently pursuing an MSc in Data Science & AI at the University of Sri Jayewardenepura.</p>
+        </div>
+        <div class="card-3d js-tilt">
+          <h3>Educator</h3>
+          <p>Subject Head for Cambridge and Edexcel IAL Computer Science. I design examiner-style resources and mentor learners toward academic excellence.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="services" class="reveal">
+      <h2 class="section-title">Services Offered</h2>
+      <div class="grid">
+        <div class="card-3d js-tilt">
+          <h3>Pearson Edexcel</h3>
+          <ul>
+            <li>IAL: IT, Computer Science, Physics</li>
+            <li>IGCSE: ICT, CS, Physics, Bio, Chem</li>
+          </ul>
+        </div>
+        <div class="card-3d js-tilt">
+          <h3>Cambridge</h3>
+          <ul>
+            <li>IAL / A-Level: CS, IT</li>
+            <li>IGCSE / O-Level: ICT, CS</li>
+          </ul>
+        </div>
+        <div class="card-3d js-tilt">
+          <h3>Special Lecturing</h3>
+          <div class="tags">
+            <span class="tag">BTEC HND Computing</span>
+            <span class="tag">C# & Python</span>
+            <span class="tag">SQL Databases</span>
+            <span class="tag">Data Structures</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="development" class="reveal">
+      <h2 class="section-title">Development Projects</h2>
+      <div class="grid">
+        <div class="card-3d js-tilt">
+          <h3>Cambridge 9618 Paper Compiler</h3>
+          <p>Full-stack application featuring an automated PDF viewer and custom paper compilation system for filtering and compiling Cambridge Computer Science past papers.</p>
+          <div class="tags">
+            <span class="tag">Python Flask</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">Web UI</span>
+          </div>
+        </div>
+        <div class="card-3d js-tilt">
+          <h3>Prefect Management System</h3>
+          <p>An interactive attendance tracking and messaging web portal built with custom school branding for the Nugegoda Prefects' Guild at Royal Institute International School.</p>
+          <div class="tags">
+            <span class="tag">HTML/CSS/JS</span>
+            <span class="tag">Dashboard UI</span>
+          </div>
+        </div>
+        <div class="card-3d js-tilt">
+          <h3>SwimPro Academy Portal</h3>
+          <p>A web-based administrative dashboard paired with a custom monthly fee calculator system designed for swimming academy management.</p>
+          <div class="tags">
+            <span class="tag">JavaScript</span>
+            <span class="tag">Frontend Architecture</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="reveal">
+      <h2 class="section-title">Experience & Education</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <span class="time-date">2026 – Present</span>
+          <h4>Visiting Lecturer</h4>
+          <span>ESOFT Metro Campus</span>
+          <p>Pearson BTEC HND Computing & Diploma in ICT (DIIT)</p>
+        </div>
+        <div class="timeline-item">
+          <span class="time-date">May 2026 – Present</span>
+          <h4>Head of Subject — Edexcel IAL Computer Science</h4>
+          <span>Royal Institute International School</span>
+          <p>Spearhead the design and oversight of lesson plans and maintain academic integrity in Computer Science and Python programming.</p>
+        </div>
+        <div class="timeline-item">
+          <span class="time-date">In Progress</span>
+          <h4>MSc Data Science & AI</h4>
+          <span>University of Sri Jayewardenepura</span>
+        </div>
+        <div class="timeline-item">
+          <span class="time-date">2022 – 2023</span>
+          <h4>BSc (Hons) Software Engineering</h4>
+          <span>Cardiff Metropolitan University</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // 1. Scroll Reveal Animation
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // 2. 3D Parallax Mouse Move Effect for Hero
+    const hero = document.getElementById('hero3d');
+    document.addEventListener('mousemove', (e) => {
+      const xAxis = (window.innerWidth / 2 - e.pageX) / 50;
+      const yAxis = (window.innerHeight / 2 - e.pageY) / 50;
+      hero.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+    });
+
+    // 3. Custom 3D Tilt Effect for Cards
+    const tiltCards = document.querySelectorAll('.js-tilt');
+    tiltCards.forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = ((y - centerY) / centerY) * -10;
+        const rotateY = ((x - centerX) / centerX) * 10;
+        
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        card.style.border = '1px solid rgba(0, 240, 255, 0.4)';
+      });
+
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+        card.style.border = '1px solid var(--surface-border)';
+      });
+    });
+  </script>
+</body>
+</html>
