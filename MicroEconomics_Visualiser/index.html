@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Short-Run Shut-Down Condition under Imperfect Competition — Interactive Microeconomics Lab</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Newsreader (Academic Serif), Plus Jakarta Sans (UI), JetBrains Mono (Tabular Math) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            paper: '#FAF8F5',
+            ink: '#0F172A',
+            slateMuted: '#475569',
+            slateTech: '#64748B',
+            borderSubtle: '#E2E8F0',
+            demandBlue: '#2563EB',
+            mrIndigo: '#4F46E5',
+            mcCrimson: '#DC2626',
+            atcTeal: '#0D9488',
+            avcAmber: '#D97706',
+            afcSlate: '#94A3B8'
+          },
+          fontFamily: {
+            serif: ['Newsreader', 'Georgia', 'serif'],
+            sans: ['Plus Jakarta Sans', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #FAF8F5;
+      color: #0F172A;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Custom Range Sliders */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: #E2E8F0;
+      border-radius: 999px;
+      outline: none;
+      transition: background 0.15s ease;
+    }
+    input[type="range"]:hover {
+      background: #CBD5E1;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #0F172A;
+      border: 2.5px solid #FFFFFF;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.35);
+      cursor: grab;
+      transition: transform 0.12s ease, background-color 0.12s ease;
+    }
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.12);
+      background: #2563EB;
+    }
+    input[type="range"]::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.18);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #0F172A;
+      border: 2.5px solid #FFFFFF;
+      box-shadow: 0 1px 4px rgba(15, 23, 42, 0.35);
+      cursor: grab;
+    }
+
+    /* SVG Halo Text for Textbook Legibility */
+    .svg-halo {
+      paint-order: stroke fill;
+      stroke: #FFFFFF;
+      stroke-width: 5px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .svg-halo-sm {
+      paint-order: stroke fill;
+      stroke: #FFFFFF;
+      stroke-width: 3.5px;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Demand Drag Handle Cursor */
+    .demand-drag-zone {
+      cursor: ns-resize;
+    }
+
+    /* Subtle Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #FAF8F5;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-blue-100 selection:text-blue-900">
+
+  <!-- TOP EDITORIAL HEADER & SCENARIO PRESETS -->
+  <header class="border-b border-slate-200/90 bg-white/90 backdrop-blur-md sticky top-0 z-30">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 py-3">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+        <!-- Title & Subtitle -->
+        <div class="flex items-start sm:items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-slate-900 text-white flex items-center justify-center font-serif font-bold text-lg shrink-0 shadow-sm">
+            MR
+          </div>
+          <div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-[11px] font-mono uppercase tracking-wider px-2 py-0.5 rounded bg-slate-100 text-slate-700 font-semibold border border-slate-200">
+                Microeconomics Visualizer
+              </span>
+              <span class="text-xs text-slate-500 hidden sm:inline">Monopoly &amp; Monopolistic Competition</span>
+            </div>
+            <h1 class="font-serif text-xl sm:text-2xl font-bold text-slate-900 tracking-tight leading-snug">
+              Short-Run Shut-Down Condition under Imperfect Competition
+            </h1>
+          </div>
+        </div>
+
+        <!-- Export Action Buttons -->
+        <div class="flex items-center gap-2 self-start lg:self-center">
+          <button id="btnExportPNG" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-900 text-white hover:bg-slate-800 active:scale-[0.99] transition shadow-sm">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V4"/>
+            </svg>
+            Download PNG (2x)
+          </button>
+          <button id="btnExportSVG" type="button" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 active:scale-[0.99] transition shadow-sm">
+            <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+            </svg>
+            Export SVG Vector
+          </button>
+        </div>
+      </div>
+
+      <!-- 5 Interactive Textbook Scenario Presets -->
+      <div class="mt-3 pt-2.5 border-t border-slate-100 flex items-center gap-1.5 overflow-x-auto pb-1">
+        <span class="text-[11px] font-mono uppercase tracking-wider text-slate-400 font-semibold mr-1 shrink-0">
+          Textbook Presets:
+        </span>
+
+        <button type="button" data-preset="shutdown_point" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 flex items-center gap-1.5 border">
+          <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+          <span>1. Shut-Down Point (<span class="font-mono">P = AVC</span> Tangency)</span>
+        </button>
+
+        <button type="button" data-preset="immediate_shutdown" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 flex items-center gap-1.5 border">
+          <span class="w-2 h-2 rounded-full bg-rose-600"></span>
+          <span>2. Immediate Shut-Down (<span class="font-mono">P &lt; AVC</span>)</span>
+        </button>
+
+        <button type="button" data-preset="operate_loss" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 flex items-center gap-1.5 border">
+          <span class="w-2 h-2 rounded-full bg-orange-500"></span>
+          <span>3. Operate at a Loss (<span class="font-mono">AVC &lt; P &lt; ATC</span>)</span>
+        </button>
+
+        <button type="button" data-preset="breakeven" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 flex items-center gap-1.5 border">
+          <span class="w-2 h-2 rounded-full bg-teal-600"></span>
+          <span>4. Normal Profit (<span class="font-mono">P = ATC</span>)</span>
+        </button>
+
+        <button type="button" data-preset="supernormal" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 flex items-center gap-1.5 border">
+          <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+          <span>5. Supernormal Profit (<span class="font-mono">P &gt; ATC</span>)</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE (TWO-COLUMN DESKTOP ARCHITECTURE) -->
+  <main class="max-w-[1440px] w-full mx-auto px-4 sm:px-6 py-5 flex-1">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+
+      <!-- LEFT / CENTER PRIMARY STAGE (68% -> 8 of 12 cols on lg) -->
+      <section class="lg:col-span-8 flex flex-col gap-4">
+
+        <!-- CHART CARD -->
+        <div class="bg-white rounded-xl border border-slate-200/90 shadow-sm overflow-hidden">
+
+          <!-- Top Chart Customization Bar -->
+          <div class="px-4 py-3 bg-slate-50/70 border-b border-slate-200/80 flex flex-wrap items-center justify-between gap-3">
+            <!-- Shading Mode Selector -->
+            <div class="flex items-center gap-2 flex-wrap">
+              <label for="shadeModeSelect" class="text-xs font-semibold text-slate-600">Shaded Region:</label>
+              <select id="shadeModeSelect" class="text-xs font-medium bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="profit_loss">Total Economic Loss / Profit Area</option>
+                <option value="decompose">Decompose Fixed (TFC) vs. Uncovered Variable Loss</option>
+                <option value="tr">Total Revenue Rectangle (TR = P* × Q*)</option>
+                <option value="tvc">Total Variable Cost Rectangle (TVC = AVC* × Q*)</option>
+                <option value="none">None (Clean Curves Only)</option>
+              </select>
+            </div>
+
+            <!-- Layer Visibility Pills -->
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-white border border-slate-200 text-slate-700 cursor-pointer hover:bg-slate-50 select-none">
+                <input type="checkbox" id="chkShowATC" checked class="rounded text-teal-600 focus:ring-0 w-3.5 h-3.5" />
+                <span class="w-2 h-2 rounded-full bg-atcTeal"></span>
+                <span>ATC</span>
+              </label>
+
+              <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-white border border-slate-200 text-slate-700 cursor-pointer hover:bg-slate-50 select-none">
+                <input type="checkbox" id="chkShowAFC" class="rounded text-slate-600 focus:ring-0 w-3.5 h-3.5" />
+                <span class="w-2 h-2 rounded-full bg-afcSlate"></span>
+                <span>AFC</span>
+              </label>
+
+              <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-white border border-slate-200 text-slate-700 cursor-pointer hover:bg-slate-50 select-none">
+                <input type="checkbox" id="chkShowPoints" checked class="rounded text-blue-600 focus:ring-0 w-3.5 h-3.5" />
+                <span>Points (A, B, C, E)</span>
+              </label>
+
+              <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-white border border-slate-200 text-slate-700 cursor-pointer hover:bg-slate-50 select-none">
+                <input type="checkbox" id="chkShowCallouts" checked class="rounded text-blue-600 focus:ring-0 w-3.5 h-3.5" />
+                <span>Textbook Callouts</span>
+              </label>
+
+              <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-white border border-slate-200 text-slate-700 cursor-pointer hover:bg-slate-50 select-none">
+                <input type="checkbox" id="chkShowMinima" checked class="rounded text-blue-600 focus:ring-0 w-3.5 h-3.5" />
+                <span>Min AVC &amp; ATC</span>
+              </label>
+
+              <label class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-white border border-slate-200 text-slate-700 cursor-pointer hover:bg-slate-50 select-none">
+                <input type="checkbox" id="chkShowGrid" checked class="rounded text-blue-600 focus:ring-0 w-3.5 h-3.5" />
+                <span>Grid</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Interactive SVG Canvas Wrapper -->
+          <div class="relative bg-white p-2 sm:p-4 select-none">
+            <svg id="econSvg" viewBox="0 0 820 560" class="w-full h-auto block overflow-visible" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <!-- Diagonal Hatch Pattern for Economic Loss -->
+                <pattern id="lossHatchPattern" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                  <rect width="10" height="10" fill="rgba(225, 29, 72, 0.13)" />
+                  <line x1="0" y1="0" x2="0" y2="10" stroke="rgba(225, 29, 72, 0.42)" stroke-width="2.2" />
+                </pattern>
+
+                <!-- Diagonal Hatch Pattern for Uncovered Variable Cost Loss (Extra Loss from Operating) -->
+                <pattern id="uncoveredVcPattern" width="8" height="8" patternTransform="rotate(-45 0 0)" patternUnits="userSpaceOnUse">
+                  <rect width="8" height="8" fill="rgba(225, 29, 72, 0.22)" />
+                  <line x1="0" y1="0" x2="0" y2="8" stroke="rgba(190, 18, 60, 0.55)" stroke-width="2.2" />
+                </pattern>
+
+                <!-- Fixed Cost Area Pattern -->
+                <pattern id="tfcPattern" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                  <rect width="10" height="10" fill="rgba(217, 119, 6, 0.13)" />
+                  <line x1="0" y1="0" x2="0" y2="10" stroke="rgba(217, 119, 6, 0.40)" stroke-width="2" />
+                </pattern>
+
+                <!-- Supernormal Profit Pattern -->
+                <pattern id="profitPattern" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                  <rect width="10" height="10" fill="rgba(16, 185, 129, 0.15)" />
+                  <line x1="0" y1="0" x2="0" y2="10" stroke="rgba(5, 150, 105, 0.38)" stroke-width="2" />
+                </pattern>
+
+                <!-- Arrowhead Markers -->
+                <marker id="arrowDark" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#0F172A" />
+                </marker>
+                <marker id="arrowCrimson" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#BE123C" />
+                </marker>
+                <marker id="arrowAmber" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#B45309" />
+                </marker>
+                <marker id="arrowBlue" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                  <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1D4ED8" />
+                </marker>
+
+                <!-- Plot Clip Path -->
+                <clipPath id="plotClip">
+                  <rect x="78" y="54" width="662" height="436" />
+                </clipPath>
+              </defs>
+
+              <!-- White Background Rect for Clean Export -->
+              <rect x="0" y="0" width="820" height="560" fill="#FFFFFF" />
+
+              <!-- Chart Header Title inside SVG (for Publication Export) -->
+              <text id="svgChartTitle" x="78" y="28" font-family="Newsreader, Georgia, serif" font-size="18" font-weight="700" fill="#0F172A">
+                Short-Run Shut-Down Condition under Imperfect Competition
+              </text>
+              <text id="svgChartSubtitle" x="78" y="45" font-family="Plus Jakarta Sans, sans-serif" font-size="11.5" font-weight="500" fill="#64748B">
+                Downward-sloping Demand (AR) &amp; Marginal Revenue (MR) with U-shaped Short-Run Cost Curves
+              </text>
+
+              <!-- Coordinate Plot Background -->
+              <rect x="78" y="54" width="662" height="436" fill="#FFFFFF" />
+
+              <!-- Dynamic Grid Layer -->
+              <g id="gridLayer"></g>
+
+              <!-- Shaded Economic Rectangles Layer (Clipped) -->
+              <g id="shadedLayer" clip-path="url(#plotClip)"></g>
+
+              <!-- Equilibrium Drop-Lines Layer -->
+              <g id="dropLinesLayer"></g>
+
+              <!-- Curves Layer (Clipped) -->
+              <g id="curvesLayer" clip-path="url(#plotClip)"></g>
+
+              <!-- Direct Curve End Labels Layer -->
+              <g id="curveLabelsLayer"></g>
+
+              <!-- Axes & Ticks Layer -->
+              <g id="axesLayer"></g>
+
+              <!-- Key Intersection & Tangency Points Layer -->
+              <g id="pointsLayer"></g>
+
+              <!-- Textbook Callouts Layer -->
+              <g id="calloutsLayer"></g>
+
+              <!-- Interactive Hover Crosshair Layer -->
+              <g id="hoverLayer" style="pointer-events: none;"></g>
+
+              <!-- Invisible Interactive Overlay for Hover & Direct Curve Dragging -->
+              <rect id="interactionRect" x="78" y="54" width="662" height="436" fill="transparent" style="cursor: crosshair;" />
+            </svg>
+
+            <!-- Floating Interactive Hint Pill -->
+            <div class="mt-2 pt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+              <div class="flex items-center gap-4 flex-wrap">
+                <span class="inline-flex items-center gap-1.5">
+                  <span class="w-2.5 h-0.5 bg-demandBlue inline-block"></span>
+                  <strong class="text-slate-700">D = AR</strong> (Demand)
+                </span>
+                <span class="inline-flex items-center gap-1.5">
+                  <span class="w-2.5 h-0.5 border-b-2 border-dashed border-mrIndigo inline-block"></span>
+                  <strong class="text-slate-700">MR</strong> (Marginal Revenue)
+                </span>
+                <span class="inline-flex items-center gap-1.5">
+                  <span class="w-2.5 h-0.5 bg-mcCrimson inline-block"></span>
+                  <strong class="text-slate-700">MC</strong> (Marginal Cost)
+                </span>
+                <span class="inline-flex items-center gap-1.5">
+                  <span class="w-2.5 h-0.5 bg-atcTeal inline-block"></span>
+                  <strong class="text-slate-700">ATC</strong> (Avg. Total Cost)
+                </span>
+                <span class="inline-flex items-center gap-1.5">
+                  <span class="w-2.5 h-0.5 bg-avcAmber inline-block"></span>
+                  <strong class="text-slate-700">AVC</strong> (Avg. Variable Cost)
+                </span>
+              </div>
+              <div class="text-[11px] font-mono text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md">
+                Tip: Drag Demand curve vertically or hover to inspect (Q, P, Costs)
+              </div>
+            </div>
+          </div>
+
+          <!-- Custom Title & Axis Labels Accordion / Bar -->
+          <div class="px-4 py-2.5 bg-slate-50 border-t border-slate-200/80 flex flex-wrap items-center gap-3 text-xs">
+            <span class="font-semibold text-slate-600">Customize Labels for Export:</span>
+            <div class="flex items-center gap-1.5 flex-1 min-w-[200px]">
+              <span class="text-slate-400">Title:</span>
+              <input id="inputChartTitle" type="text" value="Short-Run Shut-Down Condition under Imperfect Competition" class="w-full bg-white border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-slate-400">Y-Axis:</span>
+              <input id="inputYAxis" type="text" value="Price, Cost & Revenue ($)" class="w-36 bg-white border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-slate-400">X-Axis:</span>
+              <input id="inputXAxis" type="text" value="Quantity of Output (Q)" class="w-36 bg-white border border-slate-300 rounded px-2 py-1 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-blue-500" />
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTTOM CONCISE TEXTBOOK GUIDE CARD -->
+        <div class="bg-white rounded-xl border border-slate-200/90 shadow-sm p-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-4 border-b border-slate-100">
+            <div>
+              <h2 class="font-serif text-lg font-bold text-slate-900">
+                Textbook Analytical Guide: Imperfect vs. Perfect Competition Shut-Down Rule
+              </h2>
+              <p class="text-xs text-slate-500">
+                Why the shut-down point under monopoly / monopolistic competition occurs to the left of minimum AVC
+              </p>
+            </div>
+            <span class="text-[11px] font-mono px-2.5 py-1 rounded bg-amber-50 text-amber-900 border border-amber-200 font-semibold self-start sm:self-auto">
+              Key Exam Distinction: Tangency of AR &amp; AVC
+            </span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs leading-relaxed">
+            <!-- Condition 1 -->
+            <div class="p-3.5 rounded-lg bg-amber-50/60 border border-amber-200/80">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-bold text-amber-950">1. Exact Shut-Down Point</span>
+                <span class="font-mono font-bold text-amber-800 bg-amber-100 px-1.5 py-0.5 rounded">P* = AVC*</span>
+              </div>
+              <p class="text-slate-700">
+                At <span class="font-mono font-semibold">Q*</span> (where <span class="font-mono">MR = MC</span>), the downward-sloping <span class="font-mono font-semibold">D = AR</span> curve is <strong>tangent</strong> to the <span class="font-mono font-semibold">AVC</span> curve. Total Revenue exactly covers Total Variable Cost (<span class="font-mono">TR = TVC</span>), leaving a loss equal to Fixed Cost (<span class="font-mono">-TFC</span>). The firm is indifferent between operating and shutting down.
+              </p>
+            </div>
+
+            <!-- Condition 2 -->
+            <div class="p-3.5 rounded-lg bg-rose-50/60 border border-rose-200/80">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-bold text-rose-950">2. Immediate Shut-Down</span>
+                <span class="font-mono font-bold text-rose-800 bg-rose-100 px-1.5 py-0.5 rounded">P* &lt; AVC*</span>
+              </div>
+              <p class="text-slate-700">
+                The entire Demand (<span class="font-mono">AR</span>) curve lies below <span class="font-mono">AVC</span>. Even at the loss-minimizing positive output where <span class="font-mono">MR = MC</span>, price cannot cover average variable costs (<span class="font-mono">TR &lt; TVC</span>). Operating adds uncovered variable losses on top of <span class="font-mono">TFC</span>, so the firm shuts down immediately (<span class="font-mono">Q = 0</span>).
+              </p>
+            </div>
+
+            <!-- Condition 3 -->
+            <div class="p-3.5 rounded-lg bg-teal-50/60 border border-teal-200/80">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-bold text-teal-950">3. Operate at a Loss</span>
+                <span class="font-mono font-bold text-teal-800 bg-teal-100 px-1.5 py-0.5 rounded">AVC* &lt; P* &lt; ATC*</span>
+              </div>
+              <p class="text-slate-700">
+                Although the firm incurs an economic loss (<span class="font-mono">P* &lt; ATC*</span>), price exceeds <span class="font-mono">AVC*</span>. Each unit sold generates a positive contribution margin (<span class="font-mono">P* - AVC* &gt; 0</span>) that pays for part of Fixed Costs, making the operating loss smaller than <span class="font-mono">-TFC</span>.
+              </p>
+            </div>
+          </div>
+
+          <!-- Mathematical Proof Note -->
+          <div class="mt-3.5 pt-3 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-600">
+            <div>
+              <strong class="text-slate-900">Why Tangency Occurs Left of Min AVC:</strong>
+              Since <span class="font-mono">MR = P + Q·(dP/dQ)</span> and <span class="font-mono">MC = AVC + Q·(dAVC/dQ)</span>, when <span class="font-mono">MR = MC</span> and <span class="font-mono">P = AVC</span> at <span class="font-mono">Q* &gt; 0</span>, their slopes must be equal: <span class="font-mono font-semibold text-slate-800">dP/dQ = dAVC/dQ &lt; 0</span>. Because Demand slopes downward (<span class="font-mono">-b &lt; 0</span>), tangency must occur on the <em>downward-sloping</em> portion of <span class="font-mono">AVC</span> (to the left of minimum <span class="font-mono">AVC</span>).
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- RIGHT INSPECTOR & PARAMETER PANEL (32% -> 4 of 12 cols on lg) -->
+      <aside class="lg:col-span-4 flex flex-col gap-4">
+
+        <!-- 1. DYNAMIC SHORT-RUN DECISION VERDICT CARD -->
+        <div id="verdictCard" class="rounded-xl border p-4 shadow-sm transition-colors duration-200 bg-amber-50/90 border-amber-300">
+          <div class="flex items-center justify-between gap-2 mb-1.5">
+            <span class="text-[11px] font-mono uppercase tracking-wider font-bold px-2 py-0.5 rounded bg-white/80 border border-current/20" id="verdictBadge">
+              SHORT-RUN VERDICT
+            </span>
+            <span id="verdictConditionChip" class="font-mono text-xs font-bold px-2 py-0.5 rounded bg-white/90 text-slate-900 shadow-2xs">
+              P* = AVC*
+            </span>
+          </div>
+          <h2 id="verdictHeadline" class="font-serif text-lg font-bold text-slate-900 leading-snug">
+            SHUT-DOWN POINT / INDIFFERENT (P* = AVC*)
+          </h2>
+          <p id="verdictExplanation" class="text-xs text-slate-700 mt-1.5 leading-relaxed">
+            At Q* = 5.00, Market Price ($35.00) exactly equals Average Variable Cost ($35.00). Total Revenue ($175.00) just covers Total Variable Cost ($175.00), so operating loss (-$100.00) equals Fixed Cost (-$100.00).
+          </p>
+        </div>
+
+        <!-- 2. INTERACTIVE ECONOMIC PARAMETER SLIDERS -->
+        <div class="bg-white rounded-xl border border-slate-200/90 shadow-sm p-4">
+          <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-100">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">
+              Model Parameters (Real-Time)
+            </h3>
+            <button id="btnResetParams" type="button" class="text-xs font-semibold text-blue-600 hover:text-blue-800 transition">
+              Reset to Tangency
+            </button>
+          </div>
+
+          <div class="space-y-4">
+            <!-- Slider 1: Demand Intercept (a) -->
+            <div>
+              <div class="flex justify-between items-baseline text-xs mb-1">
+                <label for="sliderA" class="font-semibold text-slate-700 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-demandBlue"></span>
+                  Demand Intercept (<span class="font-mono">a</span>)
+                </label>
+                <span id="valA" class="font-mono font-bold text-demandBlue tabular-nums">$55.00</span>
+              </div>
+              <input id="sliderA" type="range" min="41" max="102" step="0.25" value="55" />
+              <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-0.5">
+                <span>Low Demand ($41)</span>
+                <span>Shifts D &amp; MR Vertically</span>
+                <span>High ($102)</span>
+              </div>
+            </div>
+
+            <!-- Slider 2: Demand Slope (b) -->
+            <div>
+              <div class="flex justify-between items-baseline text-xs mb-1">
+                <label for="sliderB" class="font-semibold text-slate-700 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-mrIndigo"></span>
+                  Demand Slope (<span class="font-mono">b</span> — Market Power)
+                </label>
+                <span id="valB" class="font-mono font-bold text-mrIndigo tabular-nums">4.00</span>
+              </div>
+              <input id="sliderB" type="range" min="2.0" max="6.0" step="0.1" value="4.0" />
+              <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-0.5">
+                <span>More Elastic (2.0)</span>
+                <span>P = a - bQ</span>
+                <span>Steeper (6.0)</span>
+              </div>
+            </div>
+
+            <!-- Slider 3: Fixed Cost (FC) -->
+            <div>
+              <div class="flex justify-between items-baseline text-xs mb-1">
+                <label for="sliderFC" class="font-semibold text-slate-700 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-atcTeal"></span>
+                  Total Fixed Cost (<span class="font-mono">FC / TFC</span>)
+                </label>
+                <span id="valFC" class="font-mono font-bold text-atcTeal tabular-nums">$100.00</span>
+              </div>
+              <input id="sliderFC" type="range" min="20" max="180" step="5" value="100" />
+              <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-0.5">
+                <span>$20</span>
+                <span>Shifts ATC Only (AVC &amp; MC Fixed)</span>
+                <span>$180</span>
+              </div>
+            </div>
+
+            <!-- Slider 4: Variable Cost Level (c1) -->
+            <div>
+              <div class="flex justify-between items-baseline text-xs mb-1">
+                <label for="sliderC1" class="font-semibold text-slate-700 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-avcAmber"></span>
+                  Variable Cost Level (<span class="font-mono">c₁</span>)
+                </label>
+                <span id="valC1" class="font-mono font-bold text-avcAmber tabular-nums">$105.00</span>
+              </div>
+              <input id="sliderC1" type="range" min="85" max="125" step="0.5" value="105" />
+              <div class="flex justify-between text-[10px] text-slate-400 font-mono mt-0.5">
+                <span>Lower Costs ($85)</span>
+                <span>Shifts AVC, ATC &amp; MC</span>
+                <span>Higher ($125)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Equations Box -->
+          <div class="mt-4 pt-3 border-t border-slate-100 bg-slate-50/90 rounded-lg p-2.5 font-mono text-[11px] text-slate-700 space-y-1">
+            <div class="flex justify-between">
+              <span class="text-slate-400">Demand (AR):</span>
+              <span id="eqDemand" class="font-semibold text-demandBlue">P(Q) = 55.00 - 4.00Q</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Marginal Rev:</span>
+              <span id="eqMR" class="font-semibold text-mrIndigo">MR(Q) = 55.00 - 8.00Q</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Avg Var Cost:</span>
+              <span id="eqAVC" class="font-semibold text-avcAmber">AVC(Q) = 105 - 24Q + 2Q²</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Marginal Cost:</span>
+              <span id="eqMC" class="font-semibold text-mcCrimson">MC(Q) = 105 - 48Q + 6Q²</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. LIVE NUMERIC EQUILIBRIUM BREAKDOWN TABLE -->
+        <div class="bg-white rounded-xl border border-slate-200/90 shadow-sm p-4">
+          <div class="flex items-center justify-between mb-2.5 pb-2 border-b border-slate-100">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-800">
+              Equilibrium Breakdown (at MR = MC)
+            </h3>
+            <span class="text-[11px] font-mono text-slate-400">Tabular Readout</span>
+          </div>
+
+          <div class="divide-y divide-slate-100 text-xs">
+            <div class="py-1.5 flex justify-between items-center">
+              <span class="text-slate-600">Profit-Max / Loss-Min Output (<span class="font-mono font-semibold text-slate-800">Q*</span>)</span>
+              <span id="tblQStar" class="font-mono font-bold text-slate-900 tabular-nums">5.00 units</span>
+            </div>
+
+            <div class="py-1.5 flex justify-between items-center">
+              <span class="text-slate-600">Actual Short-Run Output (<span class="font-mono font-semibold text-slate-800">Q<sub>actual</sub></span>)</span>
+              <span id="tblQActual" class="font-mono font-bold text-slate-900 tabular-nums">5.00 units</span>
+            </div>
+
+            <div class="py-1.5 flex justify-between items-center">
+              <span class="text-slate-600">Market Price (<span class="font-mono font-semibold text-demandBlue">P* = AR*</span>)</span>
+              <span id="tblPStar" class="font-mono font-bold text-demandBlue tabular-nums">$35.00</span>
+            </div>
+
+            <div class="py-1.5 flex justify-between items-center">
+              <span class="text-slate-600">Average Variable Cost (<span class="font-mono font-semibold text-avcAmber">AVC*</span>)</span>
+              <span id="tblAVCStar" class="font-mono font-bold text-avcAmber tabular-nums">$35.00</span>
+            </div>
+
+            <div class="py-1.5 flex justify-between items-center">
+              <span class="text-slate-600">Average Total Cost (<span class="font-mono font-semibold text-atcTeal">ATC*</span>)</span>
+              <span id="tblATCStar" class="font-mono font-bold text-atcTeal tabular-nums">$55.00</span>
+            </div>
+
+            <div class="py-1.5 flex justify-between items-center">
+              <span class="text-slate-600">Marginal Rev = Marginal Cost (<span class="font-mono font-semibold text-mcCrimson">E</span>)</span>
+              <span id="tblMRMC" class="font-mono font-bold text-mcCrimson tabular-nums">$15.00</span>
+            </div>
+
+            <div class="py-1.5 flex justify-between items-center">
+              <span class="text-slate-600">Unit Contribution (<span class="font-mono">P* - AVC*</span>)</span>
+              <span id="tblUnitContrib" class="font-mono font-bold text-slate-800 tabular-nums">$0.00 / unit</span>
+            </div>
+
+            <div class="py-1.5 flex justify-between items-center bg-slate-50/70 px-2 -mx-2 rounded">
+              <span class="text-slate-600 font-medium">Total Revenue (<span class="font-mono">TR = P* × Q*</span>)</span>
+              <span id="tblTR" class="font-mono font-semibold text-slate-900 tabular-nums">$175.00</span>
+            </div>
+
+            <div class="py-1.5 flex justify-between items-center bg-slate-50/70 px-2 -mx-2 rounded">
+              <span class="text-slate-600 font-medium">Total Variable Cost (<span class="font-mono">TVC = AVC* × Q*</span>)</span>
+              <span id="tblTVC" class="font-mono font-semibold text-slate-900 tabular-nums">$175.00</span>
+            </div>
+
+            <div class="py-1.5 flex justify-between items-center bg-slate-50/70 px-2 -mx-2 rounded">
+              <span class="text-slate-600 font-medium">Total Fixed Cost (<span class="font-mono">TFC = FC</span>)</span>
+              <span id="tblTFC" class="font-mono font-semibold text-slate-900 tabular-nums">$100.00</span>
+            </div>
+
+            <div class="py-2 flex justify-between items-center border-t-2 border-slate-200 mt-1">
+              <span class="text-slate-800 font-bold">Profit / Loss if Operating (<span class="font-mono">TR - TC</span>)</span>
+              <span id="tblOperatingProfit" class="font-mono font-bold text-rose-600 tabular-nums">-$100.00</span>
+            </div>
+
+            <div class="py-1.5 flex justify-between items-center">
+              <span class="text-slate-700 font-semibold">Loss if Shut Down (<span class="font-mono">Q = 0 ⇒ -TFC</span>)</span>
+              <span id="tblShutdownLoss" class="font-mono font-bold text-slate-700 tabular-nums">-$100.00</span>
+            </div>
+          </div>
+        </div>
+
+      </aside>
+    </div>
+  </main>
+
+  <!-- APPLICATION LOGIC -->
+  <script>
+    (function () {
+      'use strict';
+
+      // =========================================================================
+      // 1. ECONOMIC MODEL STATE & SCENARIO PRESETS
+      // =========================================================================
+      // Cost function: TC(Q) = FC + c1*Q - c2*Q^2 + c3*Q^3
+      // With c2 = 24, c3 = 2:
+      //   AVC(Q) = c1 - 24Q + 2Q^2   (Min AVC at Q = 6)
+      //   MC(Q)  = c1 - 48Q + 6Q^2   (Min MC  at Q = 4)
+      //   ATC(Q) = FC/Q + c1 - 24Q + 2Q^2
+      const state = {
+        a: 55.0,          // Demand intercept
+        b: 4.0,           // Demand slope: P(Q) = a - bQ, MR(Q) = a - 2bQ
+        FC: 100.0,        // Fixed Cost (TFC)
+        c1: 105.0,        // Variable Cost intercept parameter
+        c2: 24.0,         // Quadratic cost parameter
+        c3: 2.0,          // Cubic cost parameter
+        activePreset: 'shutdown_point',
+        shadeMode: 'profit_loss',
+        showATC: true,
+        showAFC: false,
+        showPoints: true,
+        showCallouts: true,
+        showMinima: true,
+        showGrid: true,
+        chartTitle: 'Short-Run Shut-Down Condition under Imperfect Competition',
+        yAxisLabel: 'Price, Cost & Revenue ($)',
+        xAxisLabel: 'Quantity of Output (Q)',
+        hoverQ: null,
+        isDraggingDemand: false
+      };
+
+      const PRESETS = {
+        shutdown_point: {
+          a: 55.0,
+          b: 4.0,
+          FC: 100.0,
+          c1: 105.0,
+          shadeMode: 'profit_loss'
+        },
+        immediate_shutdown: {
+          a: 44.0,
+          b: 4.0,
+          FC: 100.0,
+          c1: 105.0,
+          shadeMode: 'decompose'
+        },
+        operate_loss: {
+          a: 66.5,
+          b: 4.0,
+          FC: 100.0,
+          c1: 105.0,
+          shadeMode: 'profit_loss'
+        },
+        breakeven: {
+          // Exact root where P* = ATC* for b=4, FC=100, c1=105
+          a: 73.5166,
+          b: 4.0,
+          FC: 100.0,
+          c1: 105.0,
+          shadeMode: 'profit_loss'
+        },
+        supernormal: {
+          a: 98.5,
+          b: 4.0,
+          FC: 100.0,
+          c1: 105.0,
+          shadeMode: 'profit_loss'
+        }
+      };
+
+      // =========================================================================
+      // 2. COORDINATE SYSTEM CONFIGURATION
+      // =========================================================================
+      const PLOT = {
+        x0: 78,
+        y0: 54,
+        width: 662,
+        height: 436,
+        qMax: 10.0,
+        pMax: 115.0
+      };
+
+      function qToX(q) {
+        return PLOT.x0 + (q / PLOT.qMax) * PLOT.width;
+      }
+
+      function pToY(p) {
+        return PLOT.y0 + PLOT.height - (p / PLOT.pMax) * PLOT.height;
+      }
+
+      function xToQ(x) {
+        return Math.max(0, Math.min(PLOT.qMax, ((x - PLOT.x0) / PLOT.width) * PLOT.qMax));
+      }
+
+      function yToP(y) {
+        return ((PLOT.y0 + PLOT.height - y) / PLOT.height) * PLOT.pMax;
+      }
+
+      // =========================================================================
+      // 3. EXACT MICROECONOMIC FUNCTIONS & EQUILIBRIUM SOLVER
+      // =========================================================================
+      function demandP(q) {
+        return state.a - state.b * q;
+      }
+
+      function mrVal(q) {
+        return state.a - 2 * state.b * q;
+      }
+
+      function avcVal(q) {
+        return state.c1 - state.c2 * q + state.c3 * q * q;
+      }
+
+      function afcVal(q) {
+        if (q <= 0.05) return null;
+        return state.FC / q;
+      }
+
+      function atcVal(q) {
+        if (q <= 0.05) return null;
+        return state.FC / q + avcVal(q);
+      }
+
+      function mcVal(q) {
+        return state.c1 - 2 * state.c2 * q + 3 * state.c3 * q * q;
+      }
+
+      // Solve MR(Q) = MC(Q):
+      // a - 2bQ = c1 - 2c2*Q + 3c3*Q^2
+      // 3c3 * Q^2 + (2b - 2c2)*Q + (c1 - a) = 0
+      function solveEquilibrium() {
+        const A = 3 * state.c3;
+        const B = 2 * state.b - 2 * state.c2;
+        const C = state.c1 - state.a;
+        const disc = B * B - 4 * A * C;
+
+        let qStar = 0;
+        let hasInteriorIntersection = true;
+
+        if (disc >= 0) {
+          // Valid profit-maximizing / loss-minimizing root where MC cuts MR from below (larger root)
+          qStar = (-B + Math.sqrt(disc)) / (2 * A);
+          if (qStar < 0) {
+            qStar = 0;
+            hasInteriorIntersection = false;
+          }
+        } else {
+          // If demand is so low that MR < MC everywhere, pick the Q where MR - MC is maximized
+          qStar = Math.max(0.5, -B / (2 * A));
+          hasInteriorIntersection = false;
+        }
+
+        const pStar = Math.max(0, demandP(qStar));
+        const mrStar = mrVal(qStar);
+        const mcStar = mcVal(qStar);
+        const avcStar = avcVal(qStar);
+        const atcStar = atcVal(qStar);
+
+        const tr = pStar * qStar;
+        const tvc = avcStar * qStar;
+        const tfc = state.FC;
+        const tc = tvc + tfc;
+        const operatingProfit = tr - tc;
+        const shutdownLoss = -tfc;
+
+        // Minimum of AVC: d(AVC)/dQ = -c2 + 2*c3*Q = 0 => Q_minAVC = c2 / (2*c3)
+        const qMinAVC = state.c2 / (2 * state.c3);
+        const minAVC = avcVal(qMinAVC);
+
+        // Minimum of ATC: solve d(ATC)/dQ = -FC/Q^2 - c2 + 2*c3*Q = 0 via Newton-Raphson
+        let qMinATC = qMinAVC + 0.6;
+        for (let i = 0; i < 20; i++) {
+          const f = 2 * state.c3 * Math.pow(qMinATC, 3) - state.c2 * Math.pow(qMinATC, 2) - state.FC;
+          const fp = 6 * state.c3 * Math.pow(qMinATC, 2) - 2 * state.c2 * qMinATC;
+          if (Math.abs(fp) > 1e-6) {
+            qMinATC = qMinATC - f / fp;
+          }
+        }
+        const minATC = atcVal(qMinATC);
+
+        // Regime classification with tight tolerance for tangency presets
+        const diffP_AVC = pStar - avcStar;
+        const diffP_ATC = pStar - atcStar;
+        const tol = 0.18;
+
+        let regime = 'operate_loss';
+        if (!hasInteriorIntersection || diffP_AVC < -tol) {
+          regime = 'immediate_shutdown';
+        } else if (Math.abs(diffP_AVC) <= tol) {
+          regime = 'shutdown_point';
+        } else if (Math.abs(diffP_ATC) <= tol) {
+          regime = 'breakeven';
+        } else if (diffP_ATC > tol) {
+          regime = 'supernormal';
+        } else {
+          regime = 'operate_loss';
+        }
+
+        return {
+          qStar,
+          pStar,
+          mrStar,
+          mcStar,
+          avcStar,
+          atcStar,
+          tr,
+          tvc,
+          tfc,
+          tc,
+          operatingProfit,
+          shutdownLoss,
+          qMinAVC,
+          minAVC,
+          qMinATC,
+          minATC,
+          regime,
+          hasInteriorIntersection
+        };
+      }
+
+      // =========================================================================
+      // 4. SVG CHART RENDERING ENGINE
+      // =========================================================================
+      const gridLayer = document.getElementById('gridLayer');
+      const shadedLayer = document.getElementById('shadedLayer');
+      const dropLinesLayer = document.getElementById('dropLinesLayer');
+      const curvesLayer = document.getElementById('curvesLayer');
+      const curveLabelsLayer = document.getElementById('curveLabelsLayer');
+      const axesLayer = document.getElementById('axesLayer');
+      const pointsLayer = document.getElementById('pointsLayer');
+      const calloutsLayer = document.getElementById('calloutsLayer');
+      const hoverLayer = document.getElementById('hoverLayer');
+
+      function buildPath(fn, qStart, qEnd, step = 0.05) {
+        let d = '';
+        let started = false;
+        for (let q = qStart; q <= qEnd + 1e-6; q += step) {
+          const val = fn(q);
+          if (val === null || isNaN(val) || val < -30 || val > PLOT.pMax * 1.45) {
+            started = false;
+            continue;
+          }
+          const x = qToX(q).toFixed(2);
+          const y = pToY(val).toFixed(2);
+          if (!started) {
+            d += `M ${x} ${y} `;
+            started = true;
+          } else {
+            d += `L ${x} ${y} `;
+          }
+        }
+        return d.trim();
+      }
+
+      function renderGridAndAxes() {
+        let gridHtml = '';
+        let axesHtml = '';
+
+        // Vertical Q Gridlines (every 1 unit)
+        for (let q = 0; q <= PLOT.qMax; q += 1) {
+          const x = qToX(q).toFixed(2);
+          if (state.showGrid && q > 0) {
+            gridHtml += `<line x1="${x}" y1="${PLOT.y0}" x2="${x}" y2="${PLOT.y0 + PLOT.height}" stroke="#F1F5F9" stroke-width="1" />`;
+          }
+          // Tick mark & label
+          axesHtml += `<line x1="${x}" y1="${PLOT.y0 + PLOT.height}" x2="${x}" y2="${PLOT.y0 + PLOT.height + 5}" stroke="#64748B" stroke-width="1.2" />`;
+          axesHtml += `<text x="${x}" y="${PLOT.y0 + PLOT.height + 19}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#64748B">${q}</text>`;
+        }
+
+        // Horizontal P Gridlines (every 15 units)
+        for (let p = 0; p <= PLOT.pMax; p += 15) {
+          const y = pToY(p).toFixed(2);
+          if (state.showGrid && p > 0) {
+            gridHtml += `<line x1="${PLOT.x0}" y1="${y}" x2="${PLOT.x0 + PLOT.width}" y2="${y}" stroke="#F1F5F9" stroke-width="1" />`;
+          }
+          axesHtml += `<line x1="${PLOT.x0 - 5}" y1="${y}" x2="${PLOT.x0}" y2="${y}" stroke="#64748B" stroke-width="1.2" />`;
+          axesHtml += `<text x="${PLOT.x0 - 10}" y="${Number(y) + 4}" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="11" fill="#64748B">${p}</text>`;
+        }
+
+        // Primary Axes Lines with Arrows
+        axesHtml += `
+          <line x1="${PLOT.x0}" y1="${PLOT.y0 + PLOT.height}" x2="${PLOT.x0}" y2="${PLOT.y0 - 8}" stroke="#0F172A" stroke-width="1.8" marker-end="url(#arrowDark)" />
+          <line x1="${PLOT.x0}" y1="${PLOT.y0 + PLOT.height}" x2="${PLOT.x0 + PLOT.width + 10}" y2="${PLOT.y0 + PLOT.height}" stroke="#0F172A" stroke-width="1.8" marker-end="url(#arrowDark)" />
+          <text x="${PLOT.x0 + PLOT.width / 2}" y="${PLOT.y0 + PLOT.height + 44}" text-anchor="middle" font-family="Plus Jakarta Sans, sans-serif" font-size="12.5" font-weight="700" fill="#0F172A">${escapeHtml(state.xAxisLabel)}</text>
+          <text x="22" y="${PLOT.y0 + PLOT.height / 2}" text-anchor="middle" transform="rotate(-90 22 ${PLOT.y0 + PLOT.height / 2})" font-family="Plus Jakarta Sans, sans-serif" font-size="12.5" font-weight="700" fill="#0F172A">${escapeHtml(state.yAxisLabel)}</text>
+        `;
+
+        gridLayer.innerHTML = gridHtml;
+        axesLayer.innerHTML = axesHtml;
+      }
+
+      function renderShadedRegions(eq) {
+        if (state.shadeMode === 'none') {
+          shadedLayer.innerHTML = '';
+          return;
+        }
+
+        const x0 = PLOT.x0;
+        const xQ = qToX(eq.qStar);
+        const y0 = pToY(0);
+        const yP = pToY(eq.pStar);
+        const yAVC = pToY(eq.avcStar);
+        const yATC = pToY(eq.atcStar);
+        const rectW = Math.max(0, xQ - x0);
+
+        let html = '';
+
+        if (state.shadeMode === 'tr') {
+          const yTop = Math.min(yP, y0);
+          const h = Math.abs(y0 - yP);
+          html += `
+            <rect x="${x0}" y="${yTop}" width="${rectW}" height="${h}" fill="rgba(37, 99, 235, 0.14)" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="${x0 + rectW / 2}" y="${yTop + h / 2 + 4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11.5" font-weight="700" fill="#1E40AF" class="svg-halo">
+              TR = $${eq.tr.toFixed(1)}
+            </text>
+          `;
+        } else if (state.shadeMode === 'tvc') {
+          const yTop = Math.min(yAVC, y0);
+          const h = Math.abs(y0 - yAVC);
+          html += `
+            <rect x="${x0}" y="${yTop}" width="${rectW}" height="${h}" fill="rgba(217, 119, 6, 0.14)" stroke="#D97706" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="${x0 + rectW / 2}" y="${yTop + h / 2 + 4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11.5" font-weight="700" fill="#92400E" class="svg-halo">
+              TVC = $${eq.tvc.toFixed(1)}
+            </text>
+          `;
+        } else if (state.shadeMode === 'decompose') {
+          // Decompose Fixed Cost (ATC* to AVC*) vs Uncovered Variable Cost or Covered Fixed Cost
+          if (eq.pStar < eq.avcStar - 0.1) {
+            // Immediate Shut-Down: P* < AVC* < ATC*
+            // Top box: Fixed Cost TFC (between ATC* and AVC*)
+            const hTFC = Math.max(0, yAVC - yATC);
+            // Bottom box: Uncovered Variable Cost (between AVC* and P*)
+            const hUVC = Math.max(0, yP - yAVC);
+
+            html += `
+              <rect x="${x0}" y="${yATC}" width="${rectW}" height="${hTFC}" fill="url(#tfcPattern)" stroke="#D97706" stroke-width="1.4" stroke-dasharray="3 2" />
+              <rect x="${x0}" y="${yAVC}" width="${rectW}" height="${hUVC}" fill="url(#uncoveredVcPattern)" stroke="#BE123C" stroke-width="1.6" stroke-dasharray="4 2" />
+            `;
+            if (hTFC > 18) {
+              html += `
+                <text x="${x0 + rectW / 2}" y="${yATC + hTFC / 2 + 4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#92400E" class="svg-halo-sm">
+                  Fixed Cost (TFC = $${eq.tfc.toFixed(0)})
+                </text>
+              `;
+            }
+            if (hUVC > 14) {
+              html += `
+                <text x="${x0 + rectW / 2}" y="${yAVC + hUVC / 2 + 4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#9F1239" class="svg-halo-sm">
+                  Uncovered VC (-$${(eq.tvc - eq.tr).toFixed(1)})
+                </text>
+              `;
+            }
+          } else if (eq.pStar < eq.atcStar - 0.1) {
+            // Operate at Loss or Tangency: AVC* <= P* < ATC*
+            // Uncovered Fixed Cost = Loss (between ATC* and P*)
+            const hLoss = Math.max(0, yP - yATC);
+            // Covered Fixed Cost (between P* and AVC*)
+            const hCovered = Math.max(0, yAVC - yP);
+
+            html += `
+              <rect x="${x0}" y="${yATC}" width="${rectW}" height="${hLoss}" fill="url(#lossHatchPattern)" stroke="#E11D48" stroke-width="1.5" stroke-dasharray="4 2" />
+            `;
+            if (hCovered > 2) {
+              html += `
+                <rect x="${x0}" y="${yP}" width="${rectW}" height="${hCovered}" fill="rgba(16, 185, 129, 0.15)" stroke="#059669" stroke-width="1.4" stroke-dasharray="3 2" />
+              `;
+            }
+            if (hLoss > 16) {
+              html += `
+                <text x="${x0 + rectW / 2}" y="${yATC + hLoss / 2 + 4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#9F1239" class="svg-halo-sm">
+                  Net Loss = -$${Math.abs(eq.operatingProfit).toFixed(1)}
+                </text>
+              `;
+            }
+            if (hCovered > 16) {
+              html += `
+                <text x="${x0 + rectW / 2}" y="${yP + hCovered / 2 + 4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#065F46" class="svg-halo-sm">
+                  Covered FC (+$${(eq.tr - eq.tvc).toFixed(1)})
+                </text>
+              `;
+            }
+          } else {
+            // Profit
+            const hProf = Math.max(0, yATC - yP);
+            html += `
+              <rect x="${x0}" y="${yP}" width="${rectW}" height="${hProf}" fill="url(#profitPattern)" stroke="#059669" stroke-width="1.5" />
+            `;
+          }
+        } else {
+          // Default: Total Economic Loss / Profit Area (between P* and ATC*)
+          if (Math.abs(eq.pStar - eq.atcStar) <= 0.25) {
+            // Break-even: no shaded area
+          } else if (eq.pStar < eq.atcStar) {
+            const hLoss = Math.max(0, yP - yATC);
+            html += `
+              <rect x="${x0}" y="${yATC}" width="${rectW}" height="${hLoss}" fill="url(#lossHatchPattern)" stroke="#E11D48" stroke-width="1.5" stroke-dasharray="4 3" />
+            `;
+            if (hLoss > 22) {
+              const labelText = eq.regime === 'shutdown_point'
+                ? `Loss = TFC = -$${Math.abs(eq.operatingProfit).toFixed(0)}`
+                : `Economic Loss = -$${Math.abs(eq.operatingProfit).toFixed(1)}`;
+              html += `
+                <text x="${x0 + rectW / 2}" y="${yATC + hLoss / 2 + 4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11.5" font-weight="700" fill="#9F1239" class="svg-halo">
+                  ${labelText}
+                </text>
+              `;
+            }
+          } else {
+            const hProf = Math.max(0, yATC - yP);
+            html += `
+              <rect x="${x0}" y="${yP}" width="${rectW}" height="${hProf}" fill="url(#profitPattern)" stroke="#059669" stroke-width="1.6" stroke-dasharray="4 3" />
+            `;
+            if (hProf > 22) {
+              html += `
+                <text x="${x0 + rectW / 2}" y="${yP + hProf / 2 + 4}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11.5" font-weight="700" fill="#065F46" class="svg-halo">
+                  Supernormal Profit = +$${eq.operatingProfit.toFixed(1)}
+                </text>
+              `;
+            }
+          }
+        }
+
+        shadedLayer.innerHTML = html;
+      }
+
+      function renderDropLines(eq) {
+        const x0 = PLOT.x0;
+        const y0 = pToY(0);
+        const xQ = qToX(eq.qStar);
+        const yP = pToY(eq.pStar);
+        const yAVC = pToY(eq.avcStar);
+        const yATC = pToY(eq.atcStar);
+        const yE = pToY(eq.mcStar);
+
+        const highestY = Math.min(yP, state.showATC ? yATC : yP, yAVC, yE);
+
+        let html = '';
+
+        // Vertical drop line from highest equilibrium point to Q* on horizontal axis
+        html += `
+          <line x1="${xQ}" y1="${highestY}" x2="${xQ}" y2="${y0}" stroke="#334155" stroke-width="1.5" stroke-dasharray="4 3" />
+        `;
+
+        // Q* badge on X-axis
+        html += `
+          <rect x="${xQ - 26}" y="${y0 + 5}" width="52" height="18" rx="4" fill="#0F172A" />
+          <text x="${xQ}" y="${y0 + 17.5}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#FFFFFF">
+            Q*=${eq.qStar.toFixed(1)}
+          </text>
+        `;
+
+        // Horizontal drop lines to Y-axis
+        // 1) ATC* drop line
+        if (state.showATC && Math.abs(eq.atcStar - eq.pStar) > 1.8) {
+          html += `
+            <line x1="${x0}" y1="${yATC}" x2="${xQ}" y2="${yATC}" stroke="#0D9488" stroke-width="1.4" stroke-dasharray="4 3" />
+            <text x="${x0 - 7}" y="${yATC + 3.5}" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#0D9488" class="svg-halo-sm">
+              ATC*=${eq.atcStar.toFixed(0)}
+            </text>
+          `;
+        }
+
+        // 2) P* and AVC* drop lines (handle overlap gracefully when P* = AVC*)
+        if (Math.abs(eq.pStar - eq.avcStar) <= 1.2) {
+          html += `
+            <line x1="${x0}" y1="${yP}" x2="${xQ}" y2="${yP}" stroke="#B45309" stroke-width="1.7" stroke-dasharray="4 3" />
+            <text x="${x0 - 7}" y="${yP + 3.5}" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#1D4ED8" class="svg-halo-sm">
+              P*=AVC*=${eq.pStar.toFixed(0)}
+            </text>
+          `;
+        } else {
+          // Separate P* and AVC* labels
+          const tooClose = Math.abs(yP - yAVC) < 13;
+          const yPLabelOffset = tooClose ? (yP < yAVC ? -3 : 8) : 3.5;
+          const yAVCLabelOffset = tooClose ? (yAVC < yP ? -3 : 8) : 3.5;
+
+          html += `
+            <line x1="${x0}" y1="${yP}" x2="${xQ}" y2="${yP}" stroke="#2563EB" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="${x0 - 7}" y="${yP + yPLabelOffset}" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#2563EB" class="svg-halo-sm">
+              P*=${eq.pStar.toFixed(0)}
+            </text>
+            <line x1="${x0}" y1="${yAVC}" x2="${xQ}" y2="${yAVC}" stroke="#D97706" stroke-width="1.5" stroke-dasharray="4 3" />
+            <text x="${x0 - 7}" y="${yAVC + yAVCLabelOffset}" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#D97706" class="svg-halo-sm">
+              AVC*=${eq.avcStar.toFixed(0)}
+            </text>
+          `;
+        }
+
+        // 3) E (MR = MC) drop line if well separated
+        if (eq.mcStar > 2 && Math.abs(yE - yP) > 15 && Math.abs(yE - yAVC) > 15) {
+          html += `
+            <line x1="${x0}" y1="${yE}" x2="${xQ}" y2="${yE}" stroke="#94A3B8" stroke-width="1.1" stroke-dasharray="2 3" />
+          `;
+        }
+
+        dropLinesLayer.innerHTML = html;
+      }
+
+      function renderCurves() {
+        const pathDemand = buildPath(demandP, 0, PLOT.qMax, 0.1);
+        const pathMR = buildPath(mrVal, 0, PLOT.qMax, 0.1);
+        const pathAVC = buildPath(avcVal, 0.25, 9.5, 0.05);
+        const pathMC = buildPath(mcVal, 0.35, 8.2, 0.05);
+        const pathATC = state.showATC ? buildPath(atcVal, 1.05, 9.4, 0.05) : '';
+        const pathAFC = state.showAFC ? buildPath(afcVal, 1.0, 9.8, 0.05) : '';
+
+        let html = '';
+
+        // Optional AFC Curve
+        if (state.showAFC && pathAFC) {
+          html += `<path d="${pathAFC}" fill="none" stroke="#94A3B8" stroke-width="1.8" stroke-dasharray="4 4" />`;
+        }
+
+        // MR Curve (Dashed Indigo)
+        html += `<path d="${pathMR}" fill="none" stroke="#4F46E5" stroke-width="2.25" stroke-dasharray="6 4" />`;
+
+        // Demand (D = AR) Curve (Royal Academic Blue)
+        html += `<path d="${pathDemand}" fill="none" stroke="#2563EB" stroke-width="2.8" />`;
+
+        // AVC Curve (Warm Amber)
+        html += `<path d="${pathAVC}" fill="none" stroke="#D97706" stroke-width="2.75" />`;
+
+        // ATC Curve (Deep Teal)
+        if (state.showATC && pathATC) {
+          html += `<path d="${pathATC}" fill="none" stroke="#0D9488" stroke-width="2.6" />`;
+        }
+
+        // MC Curve (Crimson)
+        html += `<path d="${pathMC}" fill="none" stroke="#DC2626" stroke-width="2.8" />`;
+
+        curvesLayer.innerHTML = html;
+
+        // Render Direct Curve End Labels (Positioned cleanly near right/bottom ends of each curve)
+        let labelsHtml = '';
+
+        // 1. Demand label (D = AR)
+        const qEndD = Math.min(9.5, (state.a - 6) / state.b);
+        if (qEndD > 1) {
+          const pEndD = demandP(qEndD);
+          labelsHtml += `
+            <text x="${qToX(qEndD) + 6}" y="${pToY(pEndD) + 4}" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="#2563EB" class="svg-halo">
+              D = AR
+            </text>
+          `;
+        }
+
+        // 2. MR label
+        const qEndMR = Math.min(9.2, (state.a - 7) / (2 * state.b));
+        if (qEndMR > 0.8) {
+          const pEndMR = mrVal(qEndMR);
+          labelsHtml += `
+            <text x="${qToX(qEndMR) + 6}" y="${pToY(pEndMR) + 4}" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="#4F46E5" class="svg-halo">
+              MR
+            </text>
+          `;
+        }
+
+        // 3. MC label (near top right of MC)
+        let qEndMC = 7.4;
+        while (qEndMC > 4.5 && mcVal(qEndMC) > PLOT.pMax - 8) {
+          qEndMC -= 0.1;
+        }
+        labelsHtml += `
+          <text x="${qToX(qEndMC) + 6}" y="${pToY(mcVal(qEndMC)) + 4}" font-family="Plus Jakarta Sans, sans-serif" font-size="12.5" font-weight="700" fill="#DC2626" class="svg-halo">
+            MC
+          </text>
+        `;
+
+        // 4. ATC label
+        if (state.showATC) {
+          let qEndATC = 9.0;
+          while (qEndATC > 6.2 && atcVal(qEndATC) > PLOT.pMax - 8) {
+            qEndATC -= 0.1;
+          }
+          labelsHtml += `
+            <text x="${qToX(qEndATC) + 6}" y="${pToY(atcVal(qEndATC)) + 4}" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="#0D9488" class="svg-halo">
+              ATC
+            </text>
+          `;
+        }
+
+        // 5. AVC label
+        let qEndAVC = 9.1;
+        while (qEndAVC > 6.2 && avcVal(qEndAVC) > PLOT.pMax - 8) {
+          qEndAVC -= 0.1;
+        }
+        labelsHtml += `
+          <text x="${qToX(qEndAVC) + 6}" y="${pToY(avcVal(qEndAVC)) + 4}" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="700" fill="#D97706" class="svg-halo">
+            AVC
+          </text>
+        `;
+
+        // 6. AFC label
+        if (state.showAFC) {
+          const qEndAFC = 9.2;
+          labelsHtml += `
+            <text x="${qToX(qEndAFC) + 5}" y="${pToY(afcVal(qEndAFC)) + 4}" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="700" fill="#64748B" class="svg-halo">
+              AFC
+            </text>
+          `;
+        }
+
+        curveLabelsLayer.innerHTML = labelsHtml;
+      }
+
+      function renderPointsAndCallouts(eq) {
+        const xQ = qToX(eq.qStar);
+        const yP = pToY(eq.pStar);
+        const yAVC = pToY(eq.avcStar);
+        const yATC = pToY(eq.atcStar);
+        const yE = pToY(eq.mcStar);
+
+        let ptsHtml = '';
+        let calloutsHtml = '';
+
+        // Optional Min AVC & Min ATC markers (where MC intersects them from below)
+        if (state.showMinima) {
+          const xMinAVC = qToX(eq.qMinAVC);
+          const yMinAVC = pToY(eq.minAVC);
+          ptsHtml += `
+            <circle cx="${xMinAVC}" cy="${yMinAVC}" r="4" fill="#FFFFFF" stroke="#D97706" stroke-width="2" />
+            <text x="${xMinAVC + 6}" y="${yMinAVC + 13}" font-family="JetBrains Mono, monospace" font-size="9.5" font-weight="600" fill="#B45309" class="svg-halo-sm">
+              Min AVC
+            </text>
+          `;
+
+          if (state.showATC && eq.minATC < PLOT.pMax) {
+            const xMinATC = qToX(eq.qMinATC);
+            const yMinATC = pToY(eq.minATC);
+            ptsHtml += `
+              <circle cx="${xMinATC}" cy="${yMinATC}" r="4" fill="#FFFFFF" stroke="#0D9488" stroke-width="2" />
+              <text x="${xMinATC + 6}" y="${yMinATC + 13}" font-family="JetBrains Mono, monospace" font-size="9.5" font-weight="600" fill="#0F766E" class="svg-halo-sm">
+                Min ATC
+              </text>
+            `;
+          }
+        }
+
+        if (state.showPoints) {
+          // Point E: MR = MC Equilibrium
+          ptsHtml += `
+            <circle cx="${xQ}" cy="${yE}" r="5" fill="#FFFFFF" stroke="#DC2626" stroke-width="2.5" />
+            <text x="${xQ + 8}" y="${yE + 14}" font-family="Plus Jakarta Sans, sans-serif" font-size="11.5" font-weight="700" fill="#0F172A" class="svg-halo">
+              E (MR=MC)
+            </text>
+          `;
+
+          // Point B on ATC
+          if (state.showATC && Math.abs(eq.atcStar - eq.pStar) > 1.2) {
+            ptsHtml += `
+              <circle cx="${xQ}" cy="${yATC}" r="5" fill="#0D9488" stroke="#FFFFFF" stroke-width="2" />
+              <text x="${xQ + 8}" y="${yATC - 6}" font-family="Plus Jakarta Sans, sans-serif" font-size="11.5" font-weight="700" fill="#0D9488" class="svg-halo">
+                B
+              </text>
+            `;
+          }
+
+          // Point A (on Demand) and Point C (on AVC)
+          if (eq.regime === 'shutdown_point') {
+            // Double-ring tangency highlight at A = C
+            ptsHtml += `
+              <circle cx="${xQ}" cy="${yP}" r="9" fill="rgba(245, 158, 11, 0.22)" stroke="#D97706" stroke-width="1.5" />
+              <circle cx="${xQ}" cy="${yP}" r="5" fill="#2563EB" stroke="#FFFFFF" stroke-width="2" />
+              <text x="${xQ - 10}" y="${yP - 11}" text-anchor="end" font-family="Plus Jakarta Sans, sans-serif" font-size="11.5" font-weight="700" fill="#0F172A" class="svg-halo">
+                A = C (Tangency)
+              </text>
+            `;
+          } else if (eq.regime === 'breakeven') {
+            ptsHtml += `
+              <circle cx="${xQ}" cy="${yP}" r="9" fill="rgba(13, 148, 136, 0.22)" stroke="#0D9488" stroke-width="1.5" />
+              <circle cx="${xQ}" cy="${yP}" r="5" fill="#0D9488" stroke="#FFFFFF" stroke-width="2" />
+              <text x="${xQ + 10}" y="${yP - 8}" font-family="Plus Jakarta Sans, sans-serif" font-size="11.5" font-weight="700" fill="#0F172A" class="svg-halo">
+                A = B (Break-Even)
+              </text>
+              <circle cx="${xQ}" cy="${yAVC}" r="5" fill="#D97706" stroke="#FFFFFF" stroke-width="2" />
+              <text x="${xQ - 8}" y="${yAVC + 14}" text-anchor="end" font-family="Plus Jakarta Sans, sans-serif" font-size="11.5" font-weight="700" fill="#B45309" class="svg-halo">
+                C
+              </text>
+            `;
+          } else {
+            // Distinct A and C points
+            ptsHtml += `
+              <circle cx="${xQ}" cy="${yP}" r="5" fill="#2563EB" stroke="#FFFFFF" stroke-width="2" />
+              <text x="${xQ - 8}" y="${yP - 7}" text-anchor="end" font-family="Plus Jakarta Sans, sans-serif" font-size="11.5" font-weight="700" fill="#1D4ED8" class="svg-halo">
+                A
+              </text>
+              <circle cx="${xQ}" cy="${yAVC}" r="5" fill="#D97706" stroke="#FFFFFF" stroke-width="2" />
+              <text x="${xQ - 8}" y="${yAVC + 15}" text-anchor="end" font-family="Plus Jakarta Sans, sans-serif" font-size="11.5" font-weight="700" fill="#B45309" class="svg-halo">
+                C
+              </text>
+            `;
+          }
+        }
+
+        // Textbook Callout Annotations
+        if (state.showCallouts) {
+          if (eq.regime === 'shutdown_point') {
+            const boxX = Math.min(PLOT.x0 + PLOT.width - 235, xQ + 42);
+            const boxY = Math.max(PLOT.y0 + 18, yP - 62);
+            calloutsHtml += `
+              <line x1="${boxX}" y1="${boxY + 22}" x2="${xQ + 11}" y2="${yP - 4}" stroke="#B45309" stroke-width="1.5" marker-end="url(#arrowAmber)" />
+              <rect x="${boxX}" y="${boxY}" width="228" height="44" rx="6" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.2" />
+              <text x="${boxX + 10}" y="${boxY + 17}" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="700" fill="#92400E">
+                Shut-Down Point (P* = AVC*)
+              </text>
+              <text x="${boxX + 10}" y="${boxY + 33}" font-family="Plus Jakarta Sans, sans-serif" font-size="10.2" fill="#78350F">
+                AR is tangent to AVC left of Min AVC
+              </text>
+            `;
+          } else if (eq.regime === 'immediate_shutdown') {
+            const boxX = Math.min(PLOT.x0 + PLOT.width - 240, xQ + 44);
+            const boxY = Math.max(PLOT.y0 + 20, (yP + yAVC) / 2 - 22);
+            calloutsHtml += `
+              <line x1="${boxX}" y1="${boxY + 22}" x2="${xQ + 8}" y2="${(yP + yAVC) / 2}" stroke="#BE123C" stroke-width="1.5" marker-end="url(#arrowCrimson)" />
+              <rect x="${boxX}" y="${boxY}" width="232" height="44" rx="6" fill="#FFF1F2" stroke="#F43F5E" stroke-width="1.2" />
+              <text x="${boxX + 10}" y="${boxY + 17}" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="700" fill="#9F1239">
+                Immediate Shut-Down (P* &lt; AVC*)
+              </text>
+              <text x="${boxX + 10}" y="${boxY + 33}" font-family="Plus Jakarta Sans, sans-serif" font-size="10.2" fill="#881337">
+                Demand lies below AVC; Firm sets Q = 0
+              </text>
+            `;
+          } else if (eq.regime === 'operate_loss') {
+            const boxX = Math.min(PLOT.x0 + PLOT.width - 235, xQ + 44);
+            const boxY = Math.max(PLOT.y0 + 20, yP - 45);
+            calloutsHtml += `
+              <line x1="${boxX}" y1="${boxY + 22}" x2="${xQ + 8}" y2="${yP}" stroke="#1D4ED8" stroke-width="1.5" marker-end="url(#arrowBlue)" />
+              <rect x="${boxX}" y="${boxY}" width="228" height="44" rx="6" fill="#EFF6FF" stroke="#60A5FA" stroke-width="1.2" />
+              <text x="${boxX + 10}" y="${boxY + 17}" font-family="Plus Jakarta Sans, sans-serif" font-size="11" font-weight="700" fill="#1E40AF">
+                Operate in Short Run (P* &gt; AVC*)
+              </text>
+              <text x="${boxX + 10}" y="${boxY + 33}" font-family="Plus Jakarta Sans, sans-serif" font-size="10.2" fill="#1E3A8A">
+                Covers all TVC + $${(eq.tr - eq.tvc).toFixed(0)} of Fixed Costs
+              </text>
+            `;
+          }
+        }
+
+        pointsLayer.innerHTML = ptsHtml;
+        calloutsLayer.innerHTML = calloutsHtml;
+      }
+
+      function renderHoverCrosshair() {
+        if (state.hoverQ === null || state.hoverQ < 0.25 || state.hoverQ > 9.5) {
+          hoverLayer.innerHTML = '';
+          return;
+        }
+
+        const q = state.hoverQ;
+        const x = qToX(q);
+        const pD = demandP(q);
+        const pMR = mrVal(q);
+        const pAVC = avcVal(q);
+        const pATC = atcVal(q);
+        const pMC = mcVal(q);
+        const profitAtQ = (pD - pATC) * q;
+
+        let html = `
+          <line x1="${x}" y1="${PLOT.y0}" x2="${x}" y2="${PLOT.y0 + PLOT.height}" stroke="#64748B" stroke-width="1" stroke-dasharray="3 3" />
+        `;
+
+        const dots = [
+          { val: pD, color: '#2563EB' },
+          { val: pMR, color: '#4F46E5' },
+          { val: pAVC, color: '#D97706' },
+          { val: pMC, color: '#DC2626' }
+        ];
+        if (state.showATC && pATC !== null) {
+          dots.push({ val: pATC, color: '#0D9488' });
+        }
+
+        dots.forEach(d => {
+          if (d.val >= 0 && d.val <= PLOT.pMax) {
+            html += `<circle cx="${x}" cy="${pToY(d.val)}" r="3.8" fill="${d.color}" stroke="#FFFFFF" stroke-width="1.5" />`;
+          }
+        });
+
+        // Floating readout card in top-right of plot
+        const cardW = 178;
+        const cardH = 112;
+        const cardX = x > PLOT.x0 + PLOT.width - 210 ? x - cardW - 14 : x + 14;
+        const cardY = PLOT.y0 + 10;
+
+        html += `
+          <rect x="${cardX}" y="${cardY}" width="${cardW}" height="${cardH}" rx="6" fill="rgba(15, 23, 42, 0.93)" stroke="#334155" stroke-width="1" />
+          <text x="${cardX + 10}" y="${cardY + 18}" font-family="JetBrains Mono, monospace" font-size="10.5" font-weight="700" fill="#F8FAFC">
+            Inspect at Q = ${q.toFixed(2)}
+          </text>
+          <text x="${cardX + 10}" y="${cardY + 35}" font-family="JetBrains Mono, monospace" font-size="10" fill="#93C5FD">
+            P (AR): $${pD.toFixed(2)} | MR: $${pMR.toFixed(2)}
+          </text>
+          <text x="${cardX + 10}" y="${cardY + 51}" font-family="JetBrains Mono, monospace" font-size="10" fill="#FCD34D">
+            AVC:    $${pAVC.toFixed(2)}
+          </text>
+          <text x="${cardX + 10}" y="${cardY + 67}" font-family="JetBrains Mono, monospace" font-size="10" fill="#5EEAD4">
+            ATC:    $${pATC ? pATC.toFixed(2) : '—'}
+          </text>
+          <text x="${cardX + 10}" y="${cardY + 83}" font-family="JetBrains Mono, monospace" font-size="10" fill="#FCA5A5">
+            MC:     $${pMC.toFixed(2)}
+          </text>
+          <text x="${cardX + 10}" y="${cardY + 100}" font-family="JetBrains Mono, monospace" font-size="10" font-weight="700" fill="${profitAtQ >= 0 ? '#6EE7B7' : '#FDA4AF'}">
+            Profit(Q): ${profitAtQ >= 0 ? '+' : '-'}$${Math.abs(profitAtQ).toFixed(2)}
+          </text>
+        `;
+
+        hoverLayer.innerHTML = html;
+      }
+
+      // =========================================================================
+      // 5. UI INSPECTOR & TABLE UPDATES
+      // =========================================================================
+      function updateInspectorUI(eq) {
+        // Update SVG Title
+        document.getElementById('svgChartTitle').textContent = state.chartTitle;
+
+        // Update Slider Labels
+        document.getElementById('valA').textContent = `$${state.a.toFixed(2)}`;
+        document.getElementById('valB').textContent = state.b.toFixed(2);
+        document.getElementById('valFC').textContent = `$${state.FC.toFixed(2)}`;
+        document.getElementById('valC1').textContent = `$${state.c1.toFixed(2)}`;
+
+        // Update Equations Box
+        document.getElementById('eqDemand').textContent = `P(Q) = ${state.a.toFixed(2)} - ${state.b.toFixed(2)}Q`;
+        document.getElementById('eqMR').textContent = `MR(Q) = ${state.a.toFixed(2)} - ${(2 * state.b).toFixed(2)}Q`;
+        document.getElementById('eqAVC').textContent = `AVC(Q) = ${state.c1.toFixed(1)} - 24Q + 2Q²`;
+        document.getElementById('eqMC').textContent = `MC(Q) = ${state.c1.toFixed(1)} - 48Q + 6Q²`;
+
+        // Update Decision Verdict Banner
+        const verdictCard = document.getElementById('verdictCard');
+        const verdictChip = document.getElementById('verdictConditionChip');
+        const verdictHeadline = document.getElementById('verdictHeadline');
+        const verdictExplanation = document.getElementById('verdictExplanation');
+
+        verdictCard.className = 'rounded-xl border p-4 shadow-sm transition-colors duration-200 ';
+
+        if (eq.regime === 'immediate_shutdown') {
+          verdictCard.className += 'bg-rose-50/90 border-rose-300 text-rose-950';
+          verdictChip.textContent = 'P* < AVC*';
+          verdictHeadline.textContent = 'SHUT DOWN IMMEDIATELY (Q = 0)';
+          verdictExplanation.innerHTML = `At <span class="font-mono font-semibold">Q* = ${eq.qStar.toFixed(2)}</span>, Price (<span class="font-mono font-semibold">$${eq.pStar.toFixed(2)}</span>) is strictly below Average Variable Cost (<span class="font-mono font-semibold">$${eq.avcStar.toFixed(2)}</span>). Operating loses <span class="font-mono font-semibold">-$${Math.abs(eq.operatingProfit).toFixed(2)}</span>, whereas shutting down limits the loss to Fixed Cost (<span class="font-mono font-semibold">-$${eq.tfc.toFixed(2)}</span>).`;
+        } else if (eq.regime === 'shutdown_point') {
+          verdictCard.className += 'bg-amber-50/90 border-amber-300 text-amber-950';
+          verdictChip.textContent = 'P* = AVC*';
+          verdictHeadline.textContent = 'SHUT-DOWN POINT / INDIFFERENT (P* = AVC*)';
+          verdictExplanation.innerHTML = `At <span class="font-mono font-semibold">Q* = ${eq.qStar.toFixed(2)}</span>, the downward-sloping Demand (<span class="font-mono">AR</span>) curve is <strong>tangent</strong> to <span class="font-mono">AVC</span> at <span class="font-mono font-semibold">$${eq.pStar.toFixed(2)}</span>. Total Revenue (<span class="font-mono">$${eq.tr.toFixed(2)}</span>) exactly covers <span class="font-mono">TVC</span>, so loss equals <span class="font-mono font-semibold">-TFC (-$${eq.tfc.toFixed(2)})</span> whether operating or shut down.`;
+        } else if (eq.regime === 'operate_loss') {
+          verdictCard.className += 'bg-orange-50/90 border-orange-300 text-orange-950';
+          verdictChip.textContent = 'AVC* < P* < ATC*';
+          verdictHeadline.textContent = 'OPERATE AT A LOSS IN SHORT RUN';
+          verdictExplanation.innerHTML = `At <span class="font-mono font-semibold">Q* = ${eq.qStar.toFixed(2)}</span>, Price (<span class="font-mono font-semibold">$${eq.pStar.toFixed(2)}</span>) exceeds <span class="font-mono">AVC* ($${eq.avcStar.toFixed(2)})</span>, generating <span class="font-mono font-semibold">+$${(eq.tr - eq.tvc).toFixed(2)}</span> toward Fixed Costs. Operating loss (<span class="font-mono font-semibold">-$${Math.abs(eq.operatingProfit).toFixed(2)}</span>) is smaller than shut-down loss (<span class="font-mono">-$${eq.tfc.toFixed(2)}</span>).`;
+        } else if (eq.regime === 'breakeven') {
+          verdictCard.className += 'bg-teal-50/90 border-teal-300 text-teal-950';
+          verdictChip.textContent = 'P* = ATC*';
+          verdictHeadline.textContent = 'BREAK-EVEN / NORMAL PROFIT (Π = $0)';
+          verdictExplanation.innerHTML = `At <span class="font-mono font-semibold">Q* = ${eq.qStar.toFixed(2)}</span>, Demand (<span class="font-mono">AR</span>) is tangent to <span class="font-mono">ATC</span> at <span class="font-mono font-semibold">$${eq.pStar.toFixed(2)}</span>. The firm covers all variable and fixed opportunity costs, earning zero supernormal profit.`;
+        } else {
+          verdictCard.className += 'bg-emerald-50/90 border-emerald-300 text-emerald-950';
+          verdictChip.textContent = 'P* > ATC*';
+          verdictHeadline.textContent = 'OPERATE WITH SUPERNORMAL PROFIT';
+          verdictExplanation.innerHTML = `At <span class="font-mono font-semibold">Q* = ${eq.qStar.toFixed(2)}</span>, Price (<span class="font-mono font-semibold">$${eq.pStar.toFixed(2)}</span>) exceeds Average Total Cost (<span class="font-mono font-semibold">$${eq.atcStar.toFixed(2)}</span>), yielding a positive economic profit of <span class="font-mono font-semibold">+$${eq.operatingProfit.toFixed(2)}</span>.`;
+        }
+
+        // Update Equilibrium Breakdown Table
+        document.getElementById('tblQStar').textContent = `${eq.qStar.toFixed(2)} units`;
+        document.getElementById('tblQActual').textContent = eq.regime === 'immediate_shutdown'
+          ? `0.00 units (Shut Down)`
+          : `${eq.qStar.toFixed(2)} units`;
+        document.getElementById('tblPStar').textContent = `$${eq.pStar.toFixed(2)}`;
+        document.getElementById('tblAVCStar').textContent = `$${eq.avcStar.toFixed(2)}`;
+        document.getElementById('tblATCStar').textContent = `$${eq.atcStar.toFixed(2)}`;
+        document.getElementById('tblMRMC').textContent = `$${eq.mcStar.toFixed(2)}`;
+
+        const unitContrib = eq.pStar - eq.avcStar;
+        const elContrib = document.getElementById('tblUnitContrib');
+        elContrib.textContent = `${unitContrib >= -0.005 ? '+' : '-'}$${Math.abs(unitContrib).toFixed(2)} / unit`;
+        elContrib.className = `font-mono font-bold tabular-nums ${unitContrib > 0.05 ? 'text-emerald-700' : unitContrib < -0.05 ? 'text-rose-600' : 'text-amber-700'}`;
+
+        document.getElementById('tblTR').textContent = `$${eq.tr.toFixed(2)}`;
+        document.getElementById('tblTVC').textContent = `$${eq.tvc.toFixed(2)}`;
+        document.getElementById('tblTFC').textContent = `$${eq.tfc.toFixed(2)}`;
+
+        const elOpProfit = document.getElementById('tblOperatingProfit');
+        elOpProfit.textContent = `${eq.operatingProfit >= -0.05 ? '+' : '-'}$${Math.abs(eq.operatingProfit).toFixed(2)}`;
+        elOpProfit.className = `font-mono font-bold tabular-nums ${eq.operatingProfit > 0.1 ? 'text-emerald-600' : Math.abs(eq.operatingProfit) <= 0.1 ? 'text-teal-700' : 'text-rose-600'}`;
+
+        document.getElementById('tblShutdownLoss').textContent = `-$${eq.tfc.toFixed(2)}`;
+
+        // Update Preset Button Active Styling
+        document.querySelectorAll('.preset-btn').forEach(btn => {
+          const isMatch = btn.getAttribute('data-preset') === state.activePreset;
+          if (isMatch) {
+            btn.className = 'preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 flex items-center gap-1.5 border bg-slate-900 text-white border-slate-900 shadow-xs';
+          } else {
+            btn.className = 'preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition shrink-0 flex items-center gap-1.5 border bg-white text-slate-700 border-slate-200 hover:bg-slate-50';
+          }
+        });
+      }
+
+      // =========================================================================
+      // 6. MASTER RENDER LOOP
+      // =========================================================================
+      function renderAll() {
+        const eq = solveEquilibrium();
+        renderGridAndAxes();
+        renderShadedRegions(eq);
+        renderDropLines(eq);
+        renderCurves();
+        renderPointsAndCallouts(eq);
+        renderHoverCrosshair();
+        updateInspectorUI(eq);
+      }
+
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+
+      // =========================================================================
+      // 7. EVENT LISTENERS & INTERACTIVITY
+      // =========================================================================
+      // Preset Buttons
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const key = btn.getAttribute('data-preset');
+          const preset = PRESETS[key];
+          if (!preset) return;
+          state.a = preset.a;
+          state.b = preset.b;
+          state.FC = preset.FC;
+          state.c1 = preset.c1;
+          state.shadeMode = preset.shadeMode;
+          state.activePreset = key;
+
+          document.getElementById('sliderA').value = state.a;
+          document.getElementById('sliderB').value = state.b;
+          document.getElementById('sliderFC').value = state.FC;
+          document.getElementById('sliderC1').value = state.c1;
+          document.getElementById('shadeModeSelect').value = state.shadeMode;
+
+          renderAll();
+        });
+      });
+
+      // Reset Button
+      document.getElementById('btnResetParams').addEventListener('click', () => {
+        document.querySelector('[data-preset="shutdown_point"]').click();
+      });
+
+      // Sliders
+      const sliderA = document.getElementById('sliderA');
+      const sliderB = document.getElementById('sliderB');
+      const sliderFC = document.getElementById('sliderFC');
+      const sliderC1 = document.getElementById('sliderC1');
+
+      sliderA.addEventListener('input', e => {
+        state.a = parseFloat(e.target.value);
+        state.activePreset = null;
+        renderAll();
+      });
+      sliderB.addEventListener('input', e => {
+        state.b = parseFloat(e.target.value);
+        state.activePreset = null;
+        renderAll();
+      });
+      sliderFC.addEventListener('input', e => {
+        state.FC = parseFloat(e.target.value);
+        state.activePreset = null;
+        renderAll();
+      });
+      sliderC1.addEventListener('input', e => {
+        state.c1 = parseFloat(e.target.value);
+        state.activePreset = null;
+        renderAll();
+      });
+
+      // Customization Toolbar Controls
+      document.getElementById('shadeModeSelect').addEventListener('change', e => {
+        state.shadeMode = e.target.value;
+        renderAll();
+      });
+
+      document.getElementById('chkShowATC').addEventListener('change', e => {
+        state.showATC = e.target.checked;
+        renderAll();
+      });
+      document.getElementById('chkShowAFC').addEventListener('change', e => {
+        state.showAFC = e.target.checked;
+        renderAll();
+      });
+      document.getElementById('chkShowPoints').addEventListener('change', e => {
+        state.showPoints = e.target.checked;
+        renderAll();
+      });
+      document.getElementById('chkShowCallouts').addEventListener('change', e => {
+        state.showCallouts = e.target.checked;
+        renderAll();
+      });
+      document.getElementById('chkShowMinima').addEventListener('change', e => {
+        state.showMinima = e.target.checked;
+        renderAll();
+      });
+      document.getElementById('chkShowGrid').addEventListener('change', e => {
+        state.showGrid = e.target.checked;
+        renderAll();
+      });
+
+      // Custom Labels Inputs
+      document.getElementById('inputChartTitle').addEventListener('input', e => {
+        state.chartTitle = e.target.value || 'Short-Run Shut-Down Condition under Imperfect Competition';
+        renderAll();
+      });
+      document.getElementById('inputYAxis').addEventListener('input', e => {
+        state.yAxisLabel = e.target.value || 'Price, Cost & Revenue ($)';
+        renderAll();
+      });
+      document.getElementById('inputXAxis').addEventListener('input', e => {
+        state.xAxisLabel = e.target.value || 'Quantity of Output (Q)';
+        renderAll();
+      });
+
+      // SVG Canvas Hover & Direct Demand Curve Dragging
+      const svgEl = document.getElementById('econSvg');
+      const interactionRect = document.getElementById('interactionRect');
+
+      function getSvgCoords(evt) {
+        const pt = svgEl.createSVGPoint();
+        const clientX = evt.touches ? evt.touches[0].clientX : evt.clientX;
+        const clientY = evt.touches ? evt.touches[0].clientY : evt.clientY;
+        pt.x = clientX;
+        pt.y = clientY;
+        return pt.matrixTransform(svgEl.getScreenCTM().inverse());
+      }
+
+      interactionRect.addEventListener('mousedown', evt => {
+        const loc = getSvgCoords(evt);
+        const q = xToQ(loc.x);
+        const pClick = yToP(loc.y);
+        const pOnDemand = demandP(q);
+        // If user clicks near the Demand curve, enable direct vertical dragging
+        if (Math.abs(pClick - pOnDemand) < 9) {
+          state.isDraggingDemand = true;
+          interactionRect.style.cursor = 'ns-resize';
+        }
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (state.isDraggingDemand) {
+          state.isDraggingDemand = false;
+          interactionRect.style.cursor = 'crosshair';
+        }
+      });
+
+      interactionRect.addEventListener('mousemove', evt => {
+        const loc = getSvgCoords(evt);
+        const q = xToQ(loc.x);
+        const p = yToP(loc.y);
+
+        if (state.isDraggingDemand) {
+          // Solve for new intercept a = P + b*Q
+          const newA = Math.max(41, Math.min(102, p + state.b * q));
+          state.a = Math.round(newA * 4) / 4;
+          sliderA.value = state.a;
+          state.activePreset = null;
+          state.hoverQ = q;
+          renderAll();
+          return;
+        }
+
+        // Update cursor hint when hovering near Demand curve
+        if (Math.abs(p - demandP(q)) < 7) {
+          interactionRect.style.cursor = 'ns-resize';
+        } else {
+          interactionRect.style.cursor = 'crosshair';
+        }
+
+        state.hoverQ = q;
+        renderHoverCrosshair();
+      });
+
+      interactionRect.addEventListener('mouseleave', () => {
+        if (!state.isDraggingDemand) {
+          state.hoverQ = null;
+          renderHoverCrosshair();
+        }
+      });
+
+      // Touch support for mobile devices
+      interactionRect.addEventListener('touchstart', evt => {
+        const loc = getSvgCoords(evt);
+        const q = xToQ(loc.x);
+        const pClick = yToP(loc.y);
+        if (Math.abs(pClick - demandP(q)) < 12) {
+          state.isDraggingDemand = true;
+          evt.preventDefault();
+        }
+      }, { passive: false });
+
+      interactionRect.addEventListener('touchmove', evt => {
+        if (!state.isDraggingDemand) return;
+        evt.preventDefault();
+        const loc = getSvgCoords(evt);
+        const q = xToQ(loc.x);
+        const p = yToP(loc.y);
+        const newA = Math.max(41, Math.min(102, p + state.b * q));
+        state.a = Math.round(newA * 4) / 4;
+        sliderA.value = state.a;
+        state.activePreset = null;
+        renderAll();
+      }, { passive: false });
+
+      window.addEventListener('touchend', () => {
+        state.isDraggingDemand = false;
+      });
+
+      // =========================================================================
+      // 8. HIGH-RES PNG & VECTOR SVG EXPORT
+      // =========================================================================
+      function getStandaloneSvgString() {
+        // Hide hover crosshair before exporting
+        const prevHover = state.hoverQ;
+        state.hoverQ = null;
+        renderHoverCrosshair();
+
+        const clone = svgEl.cloneNode(true);
+        // Embed halo styles directly inside the exported SVG so standalone files render identically
+        const styleEl = document.createElementNS('http://www.w3.org/2000/svg', 'style');
+        styleEl.textContent = `
+          .svg-halo { paint-order: stroke fill; stroke: #FFFFFF; stroke-width: 5px; stroke-linecap: round; stroke-linejoin: round; }
+          .svg-halo-sm { paint-order: stroke fill; stroke: #FFFFFF; stroke-width: 3.5px; stroke-linecap: round; stroke-linejoin: round; }
+        `;
+        clone.insertBefore(styleEl, clone.firstChild);
+
+        const serializer = new XMLSerializer();
+        const svgStr = serializer.serializeToString(clone);
+
+        state.hoverQ = prevHover;
+        renderHoverCrosshair();
+        return svgStr;
+      }
+
+      document.getElementById('btnExportSVG').addEventListener('click', () => {
+        const svgStr = getStandaloneSvgString();
+        const blob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'imperfect-competition-shutdown-condition.svg';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      });
+
+      document.getElementById('btnExportPNG').addEventListener('click', () => {
+        const svgStr = getStandaloneSvgString();
+        const svgBlob = new Blob([svgStr], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+        const img = new Image();
+        img.onload = function () {
+          const scale = 2; // 2x High-DPI Publication Quality
+          const canvas = document.createElement('canvas');
+          canvas.width = 820 * scale;
+          canvas.height = 560 * scale;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          URL.revokeObjectURL(url);
+
+          canvas.toBlob(pngBlob => {
+            const pngUrl = URL.createObjectURL(pngBlob);
+            const link = document.createElement('a');
+            link.href = pngUrl;
+            link.download = 'imperfect-competition-shutdown-condition-2x.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(pngUrl);
+          }, 'image/png');
+        };
+        img.src = url;
+      });
+
+      // Initial Render on Load
+      window.addEventListener('DOMContentLoaded', () => {
+        renderAll();
+      });
+      renderAll();
+    })();
+  </script>
+    <footer style="text-align: center; padding: 24px 16px; margin-top: 48px; border-top: 1px solid #e2e8f0; color: #64748b; font-size: 0.875rem; font-family: system-ui, -apple-system, sans-serif;">
+      <p style="margin: 0;">&copy; 2026 Janidu Lankage. All Rights Reserved.</p>
+  </footer>
+</body>
+</html>
